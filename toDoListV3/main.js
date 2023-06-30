@@ -8,29 +8,28 @@ let arrayTasks = [];
 function addTask() {
     let task = {};
     if (inputTask.value && checkSameTask(inputTask.value, arrayTasks)) {
-        let dateTask = new Date()
+        let dateTask = new Date();
         task.id = Date.now();
         task.text = inputTask.value;
         task.priority = selectPriority.value;
         task.date = dateTask.toLocaleString();
         task.isCompleted = false;
         task.isCancelled = false;
-        console.log(task);
         inputTask.value = '';
         arrayTasks.push(task);
-        taskOutput(task);
+        tasksOutput();
     }
 }
 
 
 // функция проверяет, есть ли задача с таким же текстом
-function checkSameTask(text, array) {
+function checkSameTask() {
     let isNotHaveSameTask = true;
-    if (!array.length) {
+    if (!arrayTasks.length) {
         return true;
     }
-    array.forEach((task) => {
-        if (task.text === text) {
+    arrayTasks.forEach((task) => {
+        if (task.text === inputTask.value) {
             alert('Задача уже существует!');
             isNotHaveSameTask = false;
         }
@@ -39,13 +38,11 @@ function checkSameTask(text, array) {
 }
 
 // функция вывода задачи
-function taskOutput(task) {
+function tasksOutput() {
 
-
-
-
-
-taskList.innerHTML += `<div class="todo__task">
+    taskList.innerHTML = '';
+    arrayTasks.forEach(task => {
+        taskList.innerHTML += `<div class="todo__task">
             <div class="${checkPriority(task)}" id="${task.id}">${task.priority}</div>
             <div class="${changeClassTask(task)}">
                 <div class="todo__task__text__and__date">
@@ -70,15 +67,20 @@ taskList.innerHTML += `<div class="todo__task">
             <div class="todo__delete">
                 <label>
                     <button onclick="deleteTask(${task.id})"></button>
-                    <div><img src="delete.png" width="30" height="30"></div>
+                    <div><img src="delete.png" width="30" height="30" ></div>
                 </label>
             </div>
         </div>`
+    })
 }
 
 // функцкия удаления задачи
 function deleteTask(id) {
-
+    console.log('deleted');
+    let index = arrayTasks.findIndex((idx,task) => (task. id === idx.toString()));
+    arrayTasks.splice(index, 1);
+    console.log(arrayTasks);
+    tasksOutput();
 }
 
 // функция меняет стиль задачи в зависимости от статуса задачи
@@ -93,7 +95,7 @@ function changeClassTask(task) {
 }
 
 // функция окрашивает  приоритет задачи в нужный цвет
-function checkPriority (task) {
+function checkPriority(task) {
     let classColorPriority = '';
     if (task.priority === 'Низкий') {
         classColorPriority = 'todo__task__priority__red';

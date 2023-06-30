@@ -199,11 +199,13 @@ h1 {
     height:40px;
     align-items:center;
 }
+
 .todo__sort__date__priority {
     display:flex;
     justify-content: flex-end;
     gap:10px;
 }
+
 .todo__sort__date__priority select {
     width: 150px;
     min-width: 40px;
@@ -275,9 +277,11 @@ h1 {
     position: absolute;
     right: 3px;
 }
+
 .todo__task:hover .todo__task__checkbox__failed, .todo__task:hover .todo__task__checkbox__completed {
     display:block;
 }
+
 .todo__tasks {
     display: flex;
     flex-direction: column;
@@ -371,6 +375,7 @@ h1 {
 .todo__task__text__body {
     background: white;
 }
+
 .todo__task__text {
     display:flex;
 }
@@ -383,6 +388,7 @@ h1 {
 .todo__task__checkbox__completed input, .todo__task__checkbox__failed input {
     display:none;
 }
+
 .todo__task__checkbox__failed, .todo__task__checkbox__completed {
     display: none;
 }
