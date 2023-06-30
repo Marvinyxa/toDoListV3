@@ -345,15 +345,19 @@ h1 {
     color: #0ab70a;
 }
 
-.todo__task__complete .todo__task__text {
+.todo__task__text__body__completed {
+    background: #90f190;
     text-decoration: line-through;
     color: rgba(131, 131, 131, 0.66);
 }
 
-.todo__task__text__body {
+.todo__task__text__body__cancelled {
+    background-color: indianred;
+}
+
+.todo__task__text__body,.todo__task__text__body__cancelled,.todo__task__text__body__completed {
     display:flex;
     align-items: flex-start;
-    background: white;
     position: relative;
     justify-content: space-between;
     border: 2px solid #9aafe7;
@@ -364,6 +368,9 @@ h1 {
     padding: 8px;
 }
 
+.todo__task__text__body {
+    background: white;
+}
 .todo__task__text {
     display:flex;
 }

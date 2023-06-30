@@ -1,15 +1,14 @@
 const inputTask = document.getElementById('add');
-// const buttonAddTask = document.getElementById('btn-add-task');
 const selectPriority = document.getElementById('select-priority');
-const taskList = document.getElementById('task-list');;
+const taskList = document.getElementById('task-list');
 let arrayTasks = [];
 
 
-// добавляем новую задачу
-function addTask () {
+// функция добавляет новую задачу
+function addTask() {
     let task = {};
-    if (inputTask.value && checkSameTask(inputTask.value,arrayTasks)) {
-        let dateTask = new Date ()
+    if (inputTask.value && checkSameTask(inputTask.value, arrayTasks)) {
+        let dateTask = new Date()
         task.id = Date.now();
         task.text = inputTask.value;
         task.priority = selectPriority.value;
@@ -17,47 +16,38 @@ function addTask () {
         task.isCompleted = false;
         task.isCancelled = false;
         console.log(task);
-        arrayTasks.push(task);
-        console.log(arrayTasks);
         inputTask.value = '';
+        arrayTasks.push(task);
         taskOutput(task);
     }
 }
 
 
 // функция проверяет, есть ли задача с таким же текстом
-function checkSameTask(text,array) {
-    let isHaveSameTask = true;
+function checkSameTask(text, array) {
+    let isNotHaveSameTask = true;
     if (!array.length) {
         return true;
     }
     array.forEach((task) => {
-       if(task.text === text) {
-           alert('Задача уже существует!');
-           isHaveSameTask = false;
-       }
+        if (task.text === text) {
+            alert('Задача уже существует!');
+            isNotHaveSameTask = false;
+        }
     });
-    return isHaveSameTask;
+    return isNotHaveSameTask;
 }
 
 // функция вывода задачи
 function taskOutput(task) {
-    let classColorPriority = '';
 
-    if (task.priority === 'Низкий') {
-        classColorPriority = 'todo__task__priority__red';
-    }
-    else {
-        if (task.priority === 'Средний') {
-            classColorPriority = 'todo__task__priority__yellow'
-        }
-        else {
-            classColorPriority = 'todo__task__priority__green'
-        }
-    }
-    taskList.innerHTML += `<div class="todo__task">
-            <div class="${classColorPriority}">${task.priority}</div>
-            <div class="todo__task__text__body">
+
+
+
+
+taskList.innerHTML += `<div class="todo__task">
+            <div class="${checkPriority(task)}" id="${task.id}">${task.priority}</div>
+            <div class="${changeClassTask(task)}">
                 <div class="todo__task__text__and__date">
                     <div class="todo__task__text">${task.text}</div>
                     <div class="todo__task__date">${task.date}</div>
@@ -79,9 +69,38 @@ function taskOutput(task) {
             </div>
             <div class="todo__delete">
                 <label>
-                    <button></button>
+                    <button onclick="deleteTask(${task.id})"></button>
                     <div><img src="delete.png" width="30" height="30"></div>
                 </label>
             </div>
         </div>`
+}
+
+// функцкия удаления задачи
+function deleteTask(id) {
+
+}
+
+// функция меняет стиль задачи в зависимости от статуса задачи
+function changeClassTask(task) {
+    let classTaskText = '';
+    if (task.isCompleted) {
+        classTaskText = 'todo__task__text__body__completed';
+    } else if (task.isCancelled) {
+        classTaskText = 'todo__task__text__body__cancelled';
+    } else classTaskText = 'todo__task__text__body';
+    return classTaskText;
+}
+
+// функция окрашивает  приоритет задачи в нужный цвет
+function checkPriority (task) {
+    let classColorPriority = '';
+    if (task.priority === 'Низкий') {
+        classColorPriority = 'todo__task__priority__red';
+    } else if (task.priority === 'Средний') {
+        classColorPriority = 'todo__task__priority__yellow';
+    } else {
+        classColorPriority = 'todo__task__priority__green';
+    }
+    return classColorPriority;
 }
