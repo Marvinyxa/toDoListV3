@@ -3,6 +3,7 @@ const selectPriority = document.getElementById('select-priority');
 const taskList = document.getElementById('task-list');
 let arrayTasks = [];
 checkLocalStorage();
+
 // функция добавляет новую задачу
 function addTask() {
     let task = {};
@@ -39,7 +40,7 @@ function checkSameTask() {
 
 // функция вывода задачи
 function tasksOutput() {
-
+   sortByStatus();
     taskList.innerHTML = '';
     arrayTasks.forEach(task => {
         taskList.innerHTML += `<div class="todo__task">
@@ -50,13 +51,13 @@ function tasksOutput() {
                     <div class="todo__task__date">${task.date}</div>
                 </div>
                 <div class="todo__task__button">
-                    <div class="todo__task__checkbox__completed">
+                    <div class="todo__task__checkbox__completed" onclick="completeTask(${task.id})">
                         <label>
                             <input type="checkbox">
                             <div><img src="checkmark.png" width="30" height="30"></div>
                         </label>
                     </div>
-                    <div class="todo__task__checkbox__failed">
+                    <div class="todo__task__checkbox__cancelled" onclick="cancelTask(${task.id})">
                         <label>
                             <input type="checkbox">
                             <div><img src="cross.png" width="36" height="36"></div>
@@ -72,12 +73,14 @@ function tasksOutput() {
             </div>
         </div>`
     })
+    blockButtons();
 }
 
 // функцкия удаления задачи
 function deleteTask(id) {
-    let index = arrayTasks.findIndex((idx,task) => (task. id === idx.toString()));
+    let index = arrayTasks.findIndex((idx, task) => (task.id === idx.toString()));
     arrayTasks.splice(index, 1);
+    localStorage.setItem('todo', JSON.stringify(arrayTasks));
     tasksOutput();
 }
 
@@ -104,10 +107,67 @@ function checkPriority(task) {
     }
     return classColorPriority;
 }
+
 // функция проверяет если локальное хранилище не пустое, то выводит задачу из него
 function checkLocalStorage() {
-    if (localStorage.getItem('todo')!== undefined) {
+    if (localStorage.getItem('todo') !== undefined) {
         arrayTasks = JSON.parse(localStorage.getItem('todo'));
         tasksOutput();
     }
+}
+
+function completeTask(id) {
+    arrayTasks.map(task => {
+        if (task.id === id) {
+            task.id = Date.now();
+            task.isCompleted = !task.isCompleted;
+            localStorage.setItem('todo', JSON.stringify(arrayTasks));
+        }
+        tasksOutput();
+    })
+}
+
+function cancelTask(id) {
+    arrayTasks.map(task => {
+        if (task.id === id) {
+            task.id = Date.now();
+            task.isCancelled = !task.isCancelled;
+            localStorage.setItem('todo', JSON.stringify(arrayTasks));
+        }
+        tasksOutput();
+    })
+}
+// функция блокирует одну из кнопок статуса, в зависимости от текущего статуса задачи
+function blockButtons () {
+    arrayTasks.forEach(task => {
+        if (task.isCompleted) {
+            let btnFailed = document.querySelector('.todo__task__checkbox__cancelled');
+            btnFailed.classList.replace('todo__task__checkbox__cancelled', 'todo__task__checkbox__cancelled__block');
+        }
+        if (task.isCancelled) {
+            let btnCompleted =document.querySelector('.todo__task__checkbox__completed');
+            console.log(btnCompleted);
+            btnCompleted.classList.replace('todo__task__checkbox__completed','todo__task__checkbox__completed__block');
+        }
+    })
+
+}
+// функция сортировки по статусу
+function sortByStatus () {
+    // сортируем задачи в зависимости от статуса: завершенные(зеленые) - вверху списка, отмененные(красные) - внизу списка
+    arrayTasks.sort((task1, task2) => {
+        if (task1.isCancelled && !task2.isCancelled) {
+            return 1;
+        }
+        if (!task1.isCancelled && task2.isCancelled) {
+            return -1;
+        }
+        if (task1.isCompleted && !task2.isCompleted) {
+            return -1;
+        }
+        if (!task1.isCompleted && task2.isCompleted) {
+            return 1;
+        }
+        return 0;
+    });
 }

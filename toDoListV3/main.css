@@ -278,7 +278,7 @@ h1 {
     right: 3px;
 }
 
-.todo__task:hover .todo__task__checkbox__failed, .todo__task:hover .todo__task__checkbox__completed {
+.todo__task:hover .todo__task__checkbox__cancelled, .todo__task:hover .todo__task__checkbox__completed {
     display:block;
 }
 
@@ -385,15 +385,15 @@ h1 {
     display: flex;
 }
 
-.todo__task__checkbox__completed input, .todo__task__checkbox__failed input {
+.todo__task__checkbox__completed input, .todo__task__checkbox__cancelled input {
     display:none;
 }
 
-.todo__task__checkbox__failed, .todo__task__checkbox__completed {
+.todo__task__checkbox__cancelled, .todo__task__checkbox__completed {
     display: none;
 }
 
-.todo__task__checkbox__completed img,.todo__task__checkbox__failed img {
+.todo__task__checkbox__completed img,.todo__task__checkbox__cancelled img {
     cursor:pointer;
 }
 
@@ -405,4 +405,10 @@ h1 {
     margin-right: 5px;
     cursor:pointer;
 }
+.todo__task__checkbox__cancelled__block, .todo__task__checkbox__completed__block {
+    display:none
+}
 
+.todo__task__checkbox__cancelled__block, .todo__task__checkbox__completed__block {
+    visibility:hidden;
+}
