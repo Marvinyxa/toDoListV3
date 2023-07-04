@@ -2,8 +2,7 @@ const inputTask = document.getElementById('add');
 const selectPriority = document.getElementById('select-priority');
 const taskList = document.getElementById('task-list');
 let arrayTasks = [];
-
-
+checkLocalStorage();
 // функция добавляет новую задачу
 function addTask() {
     let task = {};
@@ -18,6 +17,7 @@ function addTask() {
         inputTask.value = '';
         arrayTasks.push(task);
         tasksOutput();
+        localStorage.setItem('todo', JSON.stringify(arrayTasks));
     }
 }
 
@@ -76,10 +76,8 @@ function tasksOutput() {
 
 // функцкия удаления задачи
 function deleteTask(id) {
-    console.log('deleted');
     let index = arrayTasks.findIndex((idx,task) => (task. id === idx.toString()));
     arrayTasks.splice(index, 1);
-    console.log(arrayTasks);
     tasksOutput();
 }
 
@@ -105,4 +103,11 @@ function checkPriority(task) {
         classColorPriority = 'todo__task__priority__green';
     }
     return classColorPriority;
+}
+// функция проверяет если локальное хранилище не пустое, то выводит задачу из него
+function checkLocalStorage() {
+    if (localStorage.getItem('todo')!== undefined) {
+        arrayTasks = JSON.parse(localStorage.getItem('todo'));
+        tasksOutput();
+    }
 }
