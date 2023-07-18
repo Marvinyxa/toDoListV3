@@ -2,22 +2,21 @@ const inputTask = document.getElementById('add');
 const selectPriority = document.getElementById('select-priority');
 const taskList = document.getElementById('task-list');
 let arrayTasks = [];
-checkLocalStorage();
+checkLocalStorage('todo');
 
 // функция добавляет новую задачу
 function addTask() {
     let task = {};
-    if (inputTask.value && checkSameTask(inputTask.value, arrayTasks)) {
-        let dateTask = new Date();
+    if (inputTask.value && checkSameTask()) {
+        const taskDate = new Date();
         task.id = Date.now();
         task.text = inputTask.value;
         task.priority = selectPriority.value;
-        task.date = dateTask.toLocaleString();
-        task.isCompleted = false;
-        task.isCancelled = false;
+        task.date = taskDate.toLocaleString();
+        task.status = 2; // status=1 - завершенная, status=2 - неотмеченная, status=3 - отклоненная
         inputTask.value = '';
         arrayTasks.push(task);
-        tasksOutput();
+        tasksOutput(arrayTasks);
         localStorage.setItem('todo', JSON.stringify(arrayTasks));
     }
 }
@@ -39,28 +38,35 @@ function checkSameTask() {
 }
 
 // функция вывода задачи
-function tasksOutput() {
-   sortByStatus();
+function tasksOutput(arr) {
+    arr.sort(compareTasks);
     taskList.innerHTML = '';
-    arrayTasks.forEach(task => {
+    arr.forEach(task => {
         taskList.innerHTML += `<div class="todo__task">
-            <div class="${checkPriority(task)}" id="${task.id}">${task.priority}</div>
-            <div class="${changeClassTask(task)}">
+            <div class="${checkPriority(task)}" 
+            id="${task.id}">${task.priority}</div>
+            <div class="${changeTaskClass(task)}">
                 <div class="todo__task__text__and__date">
                     <div class="todo__task__text">${task.text}</div>
                     <div class="todo__task__date">${task.date}</div>
                 </div>
                 <div class="todo__task__button">
-                    <div class="todo__task__checkbox__completed" onclick="completeTask(${task.id})">
+                    <div class="todo__task__checkbox__completed"
+                     id="btn-complete-${task.id}">
                         <label>
-                            <input type="checkbox">
-                            <div><img src="checkmark.png" width="30" height="30"></div>
+                            <button onclick="completeTask(${task.id})"></button>
+                            <img src="checkmark.png" 
+                            width="30" 
+                            height="30">
                         </label>
                     </div>
-                    <div class="todo__task__checkbox__cancelled" onclick="cancelTask(${task.id})">
+                    <div class="todo__task__checkbox__cancelled" 
+                    id="btn-cancel-${task.id}">
                         <label>
-                            <input type="checkbox">
-                            <div><img src="cross.png" width="36" height="36"></div>
+                            <button onclick="cancelTask(${task.id})"></button>
+                            <img src="cross.png" 
+                            width="36" 
+                            height="36">
                         </label>
                     </div>
                 </div>
@@ -71,8 +77,8 @@ function tasksOutput() {
                     <div><img src="delete.png" width="30" height="30" ></div>
                 </label>
             </div>
-        </div>`
-    })
+        </div>`;
+    });
     blockButtons();
 }
 
@@ -81,18 +87,20 @@ function deleteTask(id) {
     let index = arrayTasks.findIndex((idx, task) => (task.id === idx.toString()));
     arrayTasks.splice(index, 1);
     localStorage.setItem('todo', JSON.stringify(arrayTasks));
-    tasksOutput();
+    tasksOutput(arrayTasks);
 }
 
 // функция меняет стиль задачи в зависимости от статуса задачи
-function changeClassTask(task) {
-    let classTaskText = '';
-    if (task.isCompleted) {
-        classTaskText = 'todo__task__text__body__completed';
-    } else if (task.isCancelled) {
-        classTaskText = 'todo__task__text__body__cancelled';
-    } else classTaskText = 'todo__task__text__body';
-    return classTaskText;
+function changeTaskClass(task) {
+    let taskClass = '';
+    if (task.status === 1) {
+        taskClass = 'todo__task__text__body__completed';
+    } else if (task.status === 3) {
+        taskClass = 'todo__task__text__body__cancelled';
+    } else {
+        taskClass = 'todo__task__text__body';
+    }
+    return taskClass;
 }
 
 // функция окрашивает  приоритет задачи в нужный цвет
@@ -109,65 +117,119 @@ function checkPriority(task) {
 }
 
 // функция проверяет если локальное хранилище не пустое, то выводит задачу из него
-function checkLocalStorage() {
-    if (localStorage.getItem('todo') !== undefined) {
-        arrayTasks = JSON.parse(localStorage.getItem('todo'));
-        tasksOutput();
+function checkLocalStorage(key) {
+    if (localStorage.getItem(key)) {
+        arrayTasks = JSON.parse(localStorage.getItem(key));
+        tasksOutput(arrayTasks);
     }
 }
 
 function completeTask(id) {
-    arrayTasks.map(task => {
+    let newArrayTasks = [];
+    newArrayTasks = arrayTasks.map(task => {
         if (task.id === id) {
-            task.id = Date.now();
-            task.isCompleted = !task.isCompleted;
-            localStorage.setItem('todo', JSON.stringify(arrayTasks));
+            if (task.status === 2) {
+                task.status = 1;
+                return task;
+            } else {
+                task.status = 2;
+                return task;
+            }
+        } else {
+            return task;
         }
-        tasksOutput();
     })
+    localStorage.setItem('todo', JSON.stringify(newArrayTasks));
+    tasksOutput(arrayTasks);
 }
 
 function cancelTask(id) {
-    arrayTasks.map(task => {
+    let newArrayTasks = [];
+    newArrayTasks = arrayTasks.map(task => {
         if (task.id === id) {
-            task.id = Date.now();
-            task.isCancelled = !task.isCancelled;
-            localStorage.setItem('todo', JSON.stringify(arrayTasks));
+            if (task.status === 2) {
+                task.status = 3;
+                return task;
+            } else {
+                task.status = 2;
+                return task;
+            }
+        } else {
+            return task;
         }
-        tasksOutput();
     })
+    localStorage.setItem('todo', JSON.stringify(newArrayTasks));
+    tasksOutput(arrayTasks);
 }
+
 // функция блокирует одну из кнопок статуса, в зависимости от текущего статуса задачи
-function blockButtons () {
+function blockButtons() {
     arrayTasks.forEach(task => {
-        if (task.isCompleted) {
-            let btnFailed = document.querySelector('.todo__task__checkbox__cancelled');
-            btnFailed.classList.replace('todo__task__checkbox__cancelled', 'todo__task__checkbox__cancelled__block');
+        if (task.status === 1) {
+            let btnCompleted = document.getElementById(`btn-cancel-${task.id}`);
+            btnCompleted.classList.replace('todo__task__checkbox__cancelled', 'todo__task__checkbox__cancelled__block');
         }
-        if (task.isCancelled) {
-            let btnCompleted =document.querySelector('.todo__task__checkbox__completed');
-            console.log(btnCompleted);
-            btnCompleted.classList.replace('todo__task__checkbox__completed','todo__task__checkbox__completed__block');
+    });
+    arrayTasks.forEach(task => {
+        if (task.status === 3) {
+            let btnCompleted = document.getElementById(`btn-complete-${task.id}`);
+            btnCompleted.classList.replace('todo__task__checkbox__completed', 'todo__task__checkbox__completed__block');
         }
-    })
+    });
 
 }
-// функция сортировки по статусу
-function sortByStatus () {
-    // сортируем задачи в зависимости от статуса: завершенные(зеленые) - вверху списка, отмененные(красные) - внизу списка
-    arrayTasks.sort((task1, task2) => {
-        if (task1.isCancelled && !task2.isCancelled) {
-            return 1;
-        }
-        if (!task1.isCancelled && task2.isCancelled) {
-            return -1;
-        }
-        if (task1.isCompleted && !task2.isCompleted) {
-            return -1;
-        }
-        if (!task1.isCompleted && task2.isCompleted) {
-            return 1;
-        }
-        return 0;
-    });
+
+// вспомогательная функция сортировки по статусу: status = 1 - завершенная, status = 2 - не отмечена, status = 3 - отмененная
+function compareTasks(a, b) {
+    if (a.status < b.status) return -1; // Сортировка по возрастанию
+    if (a.status > b.status) return 1;
+    return 0;
+}
+
+function filterByActive() {
+    let filteredArray;
+    filteredArray = [];
+    const checkbox = document.getElementById(('checkbox-filter-active'));
+    if (checkbox.checked) {
+        filteredArray = arrayTasks.filter(task => task.status === 2);
+        localStorage.setItem('todo-filtered', JSON.stringify(filteredArray));
+        checkLocalStorage('todo-filtered');
+        tasksOutput(arrayTasks);
+    } else {
+        arrayTasks = JSON.parse(localStorage.getItem('todo'));
+        localStorage.setItem('todo', JSON.stringify(arrayTasks));
+        tasksOutput(arrayTasks);
+    }
+}
+
+function filterByCancelled() {
+    let filteredArray;
+    filteredArray = [];
+    const checkbox = document.getElementById(('checkbox-filter-cancelled'));
+    if (checkbox.checked) {
+        filteredArray = arrayTasks.filter(task => task.status === 3);
+        localStorage.setItem('todo-filtered', JSON.stringify(filteredArray));
+        checkLocalStorage('todo-filtered');
+        tasksOutput(arrayTasks);
+    } else {
+        arrayTasks = JSON.parse(localStorage.getItem('todo'));
+        localStorage.setItem('todo', JSON.stringify(arrayTasks));
+        tasksOutput(arrayTasks);
+    }
+}
+
+function filterByCompleted() {
+    let filteredArray;
+    filteredArray = [];
+    const checkbox = document.getElementById(('checkbox-filter-completed'));
+    if (checkbox.checked) {
+        filteredArray = arrayTasks.filter(task => task.status === 1);
+        localStorage.setItem('todo-filtered', JSON.stringify(filteredArray));
+        checkLocalStorage('todo-filtered');
+        tasksOutput(arrayTasks);
+    } else {
+        arrayTasks = JSON.parse(localStorage.getItem('todo'));
+        localStorage.setItem('todo', JSON.stringify(arrayTasks));
+        tasksOutput(arrayTasks);
+    }
 }

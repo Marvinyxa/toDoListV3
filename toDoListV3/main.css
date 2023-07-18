@@ -15,7 +15,6 @@ html, body {
     border: 3px solid lightsteelblue;
 }
 
-
 * {
     margin:0;
     box-sizing: border-box;
@@ -142,9 +141,6 @@ h1 {
     display: flex;
     align-items: center;
     justify-content: flex-start;
-
-
-
 }
 
 .todo__select__priority {
@@ -315,7 +311,6 @@ h1 {
 .todo__task__text__and__date {
     display:flex;
     flex-direction: column;
-
 }
 
 .todo__task {
@@ -330,7 +325,7 @@ h1 {
     cursor:default;
 }
 
-.todo__task__priority__red,todo__task__priority__yellow, todo__task__priority__green {
+.todo__task__priority__red, .todo__task__priority__yellow, .todo__task__priority__green {
     display:flex;
     gap: 25px;
     justify-content: center;
@@ -405,10 +400,12 @@ h1 {
     margin-right: 5px;
     cursor:pointer;
 }
-.todo__task__checkbox__cancelled__block, .todo__task__checkbox__completed__block {
-    display:none
-}
 
 .todo__task__checkbox__cancelled__block, .todo__task__checkbox__completed__block {
+    display:none;
     visibility:hidden;
+}
+
+.todo__task__checkbox__completed button,.todo__task__checkbox__cancelled button {
+    display:none;
 }
