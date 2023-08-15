@@ -192,9 +192,7 @@ function filterByActive() {
     const checkbox = document.getElementById(('checkbox-filter-active'));
     if (checkbox.checked) {
         filteredArray = arrayTasks.filter(task => task.status === 2);
-        localStorage.setItem('todo-filtered', JSON.stringify(filteredArray));
-        checkLocalStorage('todo-filtered');
-        tasksOutput(arrayTasks);
+        tasksOutput(filteredArray);
     } else {
         arrayTasks = JSON.parse(localStorage.getItem('todo'));
         localStorage.setItem('todo', JSON.stringify(arrayTasks));
@@ -208,9 +206,7 @@ function filterByCancelled() {
     const checkbox = document.getElementById(('checkbox-filter-cancelled'));
     if (checkbox.checked) {
         filteredArray = arrayTasks.filter(task => task.status === 3);
-        localStorage.setItem('todo-filtered', JSON.stringify(filteredArray));
-        checkLocalStorage('todo-filtered');
-        tasksOutput(arrayTasks);
+        tasksOutput(filteredArray);
     } else {
         arrayTasks = JSON.parse(localStorage.getItem('todo'));
         localStorage.setItem('todo', JSON.stringify(arrayTasks));
@@ -224,9 +220,7 @@ function filterByCompleted() {
     const checkbox = document.getElementById(('checkbox-filter-completed'));
     if (checkbox.checked) {
         filteredArray = arrayTasks.filter(task => task.status === 1);
-        localStorage.setItem('todo-filtered', JSON.stringify(filteredArray));
-        checkLocalStorage('todo-filtered');
-        tasksOutput(arrayTasks);
+        tasksOutput(filteredArray);
     } else {
         arrayTasks = JSON.parse(localStorage.getItem('todo'));
         localStorage.setItem('todo', JSON.stringify(arrayTasks));
