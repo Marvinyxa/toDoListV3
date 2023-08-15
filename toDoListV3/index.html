@@ -13,9 +13,9 @@
             <div class="todo__new__priority">
                 <span>Выберите приоритет задачи:</span>
                 <select id="select-priority">
-                    <option>Низкий</option>
-                    <option>Средний</option>
-                    <option>Высокий</option>
+                    <option value="1">Низкий</option>
+                    <option value="2">Средний</option>
+                    <option value="3">Высокий</option>
                 </select>
             </div>
             <div class="todo__new__input">
@@ -33,11 +33,13 @@
         <div class="todo__filters">
             <div class="todo__filters__priority">
                 <span class="todo__filters__priority__span">Фильтр по приоритету:</span>
-                <select id="select-filter-priority" class="todo__select__priority">
-                    <option>Любой</option>
-                    <option>Низкий</option>
-                    <option>Средний</option>
-                    <option>Высокий</option>
+                <select id="select-filter-priority"
+                        class="todo__select__priority"
+                        onchange="filter()">
+                    <option value="4">Любой</option>
+                    <option value="1">Низкий</option>
+                    <option value="2">Средний</option>
+                    <option value="3">Высокий</option>
                 </select>
             </div>
             <div class="todo__filters__status">
@@ -45,15 +47,15 @@
                 <span>активные</span>
                 <input id="checkbox-filter-active"
                        type="checkbox"
-                       onclick="filterByActive()">
+                       onclick="filter()">
                 <span>отмененные</span>
                 <input id="checkbox-filter-cancelled"
                        type="checkbox"
-                       onclick="filterByCancelled()">
+                       onclick="filter()">
                 <span>завершенные</span>
                 <input id="checkbox-filter-completed"
                        type="checkbox"
-                       onclick="filterByCompleted()">
+                       onclick="filter()">
             </div>
         </div>
         <div class="todo__sort">
@@ -62,9 +64,11 @@
                     <div class="todo__sort__date__span">
                         <span> Сортировка по дате:</span>
                     </div>
-                    <div class="todo__sort__button">
+                    <div id="sort-by-date"
+                         class="todo__sort__button"
+                         onclick="filter()">
                         <span>Дата создания</span>
-                        <div class="arrow">
+                        <div class="arrow_hidden">
                             <img src="arrow.png"
                                  width="12"
                                  height="12">
@@ -75,9 +79,11 @@
                     <div class="todo__sort__priority__span">
                         <span>Сортировка по приоритету:</span>
                     </div>
-                    <div class="todo__sort__button">
+                    <div id="sort-by-priority"
+                         class="todo__sort__button"
+                         onclick="filter()">
                         <span>Приоритет</span>
-                        <div class="arrow">
+                        <div class="arrow_hidden">
                             <img src="arrow.png"
                                  width="12"
                                  height="12">
@@ -90,7 +96,8 @@
             <span>Поиск задачи по тексту:</span>
             <input id="input-find"
                    type="txt"
-                   placeholder="Начните вводить текст задачи...">
+                   placeholder="Начните вводить текст задачи..."
+                   onkeyup="filter()">
         </div>
     </div>
     <div id="task-list"

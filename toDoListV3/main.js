@@ -44,7 +44,7 @@ function tasksOutput(arr) {
     arr.forEach(task => {
         taskList.innerHTML += `<div class="todo__task">
             <div class="${checkPriority(task)}" 
-            id="${task.id}">${task.priority}</div>
+            id="${task.id}">${taskPriority(task)}</div>
             <div class="${changeTaskClass(task)}">
                 <div class="todo__task__text__and__date">
                     <div class="todo__task__text">${task.text}</div>
@@ -90,6 +90,16 @@ function deleteTask(id) {
     tasksOutput(arrayTasks);
 }
 
+function taskPriority (task) {
+    if (task.priority === '1') {
+        return 'Низкий';
+    }
+    else if (task.priority === '2') {
+        return 'Средний';
+    }
+    else return 'Высокий';
+}
+
 // функция меняет стиль задачи в зависимости от статуса задачи
 function changeTaskClass(task) {
     let taskClass = '';
@@ -106,9 +116,9 @@ function changeTaskClass(task) {
 // функция окрашивает  приоритет задачи в нужный цвет
 function checkPriority(task) {
     let classColorPriority = '';
-    if (task.priority === 'Низкий') {
+    if (task.priority === '1') {
         classColorPriority = 'todo__task__priority__red';
-    } else if (task.priority === 'Средний') {
+    } else if (task.priority === '2') {
         classColorPriority = 'todo__task__priority__yellow';
     } else {
         classColorPriority = 'todo__task__priority__green';
@@ -167,63 +177,57 @@ function blockButtons() {
     arrayTasks.forEach(task => {
         if (task.status === 1) {
             let btnCompleted = document.getElementById(`btn-cancel-${task.id}`);
-            btnCompleted.classList.replace('todo__task__checkbox__cancelled', 'todo__task__checkbox__cancelled__block');
+            btnCompleted?.classList.replace('todo__task__checkbox__cancelled', 'todo__task__checkbox__cancelled__block');
         }
     });
     arrayTasks.forEach(task => {
         if (task.status === 3) {
             let btnCompleted = document.getElementById(`btn-complete-${task.id}`);
-            btnCompleted.classList.replace('todo__task__checkbox__completed', 'todo__task__checkbox__completed__block');
+            btnCompleted?.classList.replace('todo__task__checkbox__completed', 'todo__task__checkbox__completed__block');
         }
     });
 
 }
 
-// вспомогательная функция сортировки по статусу: status = 1 - завершенная, status = 2 - не отмечена, status = 3 - отмененная
+// вспомогательная функция сортировки по статусу: status = 1 - завершенная, status = 2 - активная, status = 3 - отмененная
 function compareTasks(a, b) {
     if (a.status < b.status) return -1; // Сортировка по возрастанию
     if (a.status > b.status) return 1;
     return 0;
 }
 
-function filterByActive() {
-    let filteredArray;
-    filteredArray = [];
-    const checkbox = document.getElementById(('checkbox-filter-active'));
-    if (checkbox.checked) {
-        filteredArray = arrayTasks.filter(task => task.status === 2);
-        tasksOutput(filteredArray);
-    } else {
-        arrayTasks = JSON.parse(localStorage.getItem('todo'));
-        localStorage.setItem('todo', JSON.stringify(arrayTasks));
-        tasksOutput(arrayTasks);
+function filter() {
+    const checkboxActive = document.getElementById('checkbox-filter-active').checked;
+    const checkboxCancelled = document.getElementById('checkbox-filter-cancelled').checked;
+    const checkboxCompleted = document.getElementById('checkbox-filter-completed').checked;
+    const btnSortByDate = document.getElementById('sort-by-date');
+    const btnSortByPriority = document.getElementById('sort-by-priority');
+    let filteredArray= [];
+    if (checkboxActive) {
+        filteredArray = [...filteredArray, ...arrayTasks.filter(task => task.status === 2)];
     }
+    if (checkboxCancelled) {
+        filteredArray = [...filteredArray, ...arrayTasks.filter(task => task.status === 3)];
+    }
+    if (checkboxCompleted) {
+        filteredArray = [...filteredArray, ...arrayTasks.filter(task => task.status === 1)];
+    }
+    if (!checkboxCancelled && !checkboxActive && !checkboxCompleted) {
+        filteredArray = structuredClone(arrayTasks);
+    }
+    tasksOutput(findTask(filterByPriority(filteredArray)));
 }
 
-function filterByCancelled() {
-    let filteredArray;
-    filteredArray = [];
-    const checkbox = document.getElementById(('checkbox-filter-cancelled'));
-    if (checkbox.checked) {
-        filteredArray = arrayTasks.filter(task => task.status === 3);
-        tasksOutput(filteredArray);
-    } else {
-        arrayTasks = JSON.parse(localStorage.getItem('todo'));
-        localStorage.setItem('todo', JSON.stringify(arrayTasks));
-        tasksOutput(arrayTasks);
+function filterByPriority(arr) {
+    const priorityFilter = document.getElementById('select-filter-priority').value;
+    if (priorityFilter === '4') {
+        return arr;
     }
+    return arr.filter(task => task.priority === priorityFilter);
 }
 
-function filterByCompleted() {
-    let filteredArray;
-    filteredArray = [];
-    const checkbox = document.getElementById(('checkbox-filter-completed'));
-    if (checkbox.checked) {
-        filteredArray = arrayTasks.filter(task => task.status === 1);
-        tasksOutput(filteredArray);
-    } else {
-        arrayTasks = JSON.parse(localStorage.getItem('todo'));
-        localStorage.setItem('todo', JSON.stringify(arrayTasks));
-        tasksOutput(arrayTasks);
-    }
+function findTask(arr) {
+    const inputValue = document.getElementById('input-find')?.value || '';
+    console.log(arr);
+    return arr.filter(task => task.text.includes(inputValue));
 }

@@ -269,7 +269,8 @@ h1 {
     position:relative;
 }
 
-.arrow {
+.arrow_hidden {
+    display:none;
     position: absolute;
     right: 3px;
 }
