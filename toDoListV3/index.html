@@ -35,7 +35,7 @@
                 <span class="todo__filters__priority__span">Фильтр по приоритету:</span>
                 <select id="select-filter-priority"
                         class="todo__select__priority"
-                        onchange="filter()">
+                        onchange="filterTasks()">
                     <option value="4">Любой</option>
                     <option value="1">Низкий</option>
                     <option value="2">Средний</option>
@@ -47,15 +47,15 @@
                 <span>активные</span>
                 <input id="checkbox-filter-active"
                        type="checkbox"
-                       onclick="filter()">
+                       onclick="filterTasks()">
                 <span>отмененные</span>
                 <input id="checkbox-filter-cancelled"
                        type="checkbox"
-                       onclick="filter()">
+                       onclick="filterTasks()">
                 <span>завершенные</span>
                 <input id="checkbox-filter-completed"
                        type="checkbox"
-                       onclick="filter()">
+                       onclick="filterTasks()">
             </div>
         </div>
         <div class="todo__sort">
@@ -66,9 +66,10 @@
                     </div>
                     <div id="sort-by-date"
                          class="todo__sort__button"
-                         onclick="filter()">
+                         onclick="changeDate()">
                         <span>Дата создания</span>
-                        <div class="arrow_hidden">
+                        <div id="arrow-date"
+                             class="arrow">
                             <img src="arrow.png"
                                  width="12"
                                  height="12">
@@ -81,9 +82,10 @@
                     </div>
                     <div id="sort-by-priority"
                          class="todo__sort__button"
-                         onclick="filter()">
+                         onclick="changePriority()">
                         <span>Приоритет</span>
-                        <div class="arrow_hidden">
+                        <div id="arrow-priority"
+                             class="arrow">
                             <img src="arrow.png"
                                  width="12"
                                  height="12">
@@ -97,7 +99,7 @@
             <input id="input-find"
                    type="txt"
                    placeholder="Начните вводить текст задачи..."
-                   onkeyup="filter()">
+                   onkeyup="filterTasks()">
         </div>
     </div>
     <div id="task-list"

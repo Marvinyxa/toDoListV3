@@ -176,6 +176,8 @@ h1 {
     justify-content: flex-end;
     gap: 20px;
 }
+.todo__sort input {
+}
 
 .todo__sort__date__span {
     display: flex;
@@ -269,12 +271,20 @@ h1 {
     position:relative;
 }
 
-.arrow_hidden {
+.arrow {
     display:none;
     position: absolute;
     right: 3px;
 }
 
+.arrow__up {
+    display:block;
+}
+
+.arrow__down {
+    display:block;
+    transform: rotate(180deg);
+}
 .todo__task:hover .todo__task__checkbox__cancelled, .todo__task:hover .todo__task__checkbox__completed {
     display:block;
 }

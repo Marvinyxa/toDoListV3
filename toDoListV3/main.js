@@ -2,17 +2,19 @@ const inputTask = document.getElementById('add');
 const selectPriority = document.getElementById('select-priority');
 const taskList = document.getElementById('task-list');
 let arrayTasks = [];
+let dateStatus = 1; // статус 1 - нет сортировки, статус 2 - по возрастанию, статус 3 - по убыванию
+let priorityStatus = 1;
 checkLocalStorage('todo');
 
 // функция добавляет новую задачу
 function addTask() {
     let task = {};
     if (inputTask.value && checkSameTask()) {
-        const taskDate = new Date();
         task.id = Date.now();
         task.text = inputTask.value;
         task.priority = selectPriority.value;
-        task.date = taskDate.toLocaleString();
+        task.date = new Date().getTime();
+        task.stringDate = new Date().toLocaleString();
         task.status = 2; // status=1 - завершенная, status=2 - неотмеченная, status=3 - отклоненная
         inputTask.value = '';
         arrayTasks.push(task);
@@ -39,7 +41,6 @@ function checkSameTask() {
 
 // функция вывода задачи
 function tasksOutput(arr) {
-    arr.sort(compareTasks);
     taskList.innerHTML = '';
     arr.forEach(task => {
         taskList.innerHTML += `<div class="todo__task">
@@ -48,7 +49,7 @@ function tasksOutput(arr) {
             <div class="${changeTaskClass(task)}">
                 <div class="todo__task__text__and__date">
                     <div class="todo__task__text">${task.text}</div>
-                    <div class="todo__task__date">${task.date}</div>
+                    <div class="todo__task__date">${task.stringDate}</div>
                 </div>
                 <div class="todo__task__button">
                     <div class="todo__task__checkbox__completed"
@@ -130,7 +131,7 @@ function checkPriority(task) {
 function checkLocalStorage(key) {
     if (localStorage.getItem(key)) {
         arrayTasks = JSON.parse(localStorage.getItem(key));
-        tasksOutput(arrayTasks);
+        filterTasks(arrayTasks);
     }
 }
 
@@ -190,18 +191,16 @@ function blockButtons() {
 }
 
 // вспомогательная функция сортировки по статусу: status = 1 - завершенная, status = 2 - активная, status = 3 - отмененная
-function compareTasks(a, b) {
+function compareTasksByStatus(a, b) {
     if (a.status < b.status) return -1; // Сортировка по возрастанию
     if (a.status > b.status) return 1;
     return 0;
 }
 
-function filter() {
+function filterTasks() {
     const checkboxActive = document.getElementById('checkbox-filter-active').checked;
     const checkboxCancelled = document.getElementById('checkbox-filter-cancelled').checked;
-    const checkboxCompleted = document.getElementById('checkbox-filter-completed').checked;
-    const btnSortByDate = document.getElementById('sort-by-date');
-    const btnSortByPriority = document.getElementById('sort-by-priority');
+    const checkboxCompleted = document.getElementById('checkbox-filter-completed').checked;;
     let filteredArray= [];
     if (checkboxActive) {
         filteredArray = [...filteredArray, ...arrayTasks.filter(task => task.status === 2)];
@@ -215,7 +214,14 @@ function filter() {
     if (!checkboxCancelled && !checkboxActive && !checkboxCompleted) {
         filteredArray = structuredClone(arrayTasks);
     }
-    tasksOutput(findTask(filterByPriority(filteredArray)));
+    if (priorityStatus === 1 && dateStatus === 1) {
+        arrayTasks.sort(compareTasksByStatus);
+    }
+    const filteredByPriority = filterByPriority(filteredArray);
+    const sortedByPriority = sortBy(filteredByPriority,priorityStatus,'arrow-priority', 'priority');
+    const sortedByDate = sortBy(sortedByPriority,dateStatus,'arrow-date', 'date');
+    const foundTasks = findTask(sortedByDate);
+    tasksOutput(foundTasks);
 }
 
 function filterByPriority(arr) {
@@ -228,6 +234,37 @@ function filterByPriority(arr) {
 
 function findTask(arr) {
     const inputValue = document.getElementById('input-find')?.value || '';
-    console.log(arr);
-    return arr.filter(task => task.text.includes(inputValue));
+    return arr.filter(task => task.text.startsWith(inputValue));
+}
+
+function sortBy(arr, status, id, key) {
+    const arrayClone = [...arr];
+    const arrow = document.getElementById(id);
+    if (status === 2) {
+        arrow.classList.add('arrow__up');
+        arrayClone.sort((a,b) => a[key]- b[key]);
+    }
+    else if (status === 3) {
+        arrow.classList.remove('arrow__up');
+        arrow.classList.add('arrow__down');
+        arrayClone.sort((a,b) => b[key]- a[key]);
+    }
+    else {
+        arrow.classList.remove('arrow__down');
+        arrow.classList.remove('arrow__up');
+
+    }
+    return arrayClone;
+}
+
+function changePriority() {
+    (priorityStatus < 3) ? priorityStatus++ : priorityStatus = 1;
+    dateStatus = 1;
+    filterTasks();
+}
+function changeDate() {
+    (dateStatus < 3) ? dateStatus++ : dateStatus = 1;
+    priorityStatus = 1;
+
+    filterTasks();
 }
