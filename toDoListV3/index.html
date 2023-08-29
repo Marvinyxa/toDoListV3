@@ -35,7 +35,7 @@
                 <span class="todo__filters__priority__span">Фильтр по приоритету:</span>
                 <select id="select-filter-priority"
                         class="todo__select__priority"
-                        onchange="filterTasks()">
+                        onchange="updateTasks()">
                     <option value="4">Любой</option>
                     <option value="1">Низкий</option>
                     <option value="2">Средний</option>
@@ -47,15 +47,15 @@
                 <span>активные</span>
                 <input id="checkbox-filter-active"
                        type="checkbox"
-                       onclick="filterTasks()">
+                       onclick="updateTasks()">
                 <span>отмененные</span>
                 <input id="checkbox-filter-cancelled"
                        type="checkbox"
-                       onclick="filterTasks()">
+                       onclick="updateTasks()">
                 <span>завершенные</span>
                 <input id="checkbox-filter-completed"
                        type="checkbox"
-                       onclick="filterTasks()">
+                       onclick="updateTasks()">
             </div>
         </div>
         <div class="todo__sort">
@@ -99,7 +99,7 @@
             <input id="input-find"
                    type="txt"
                    placeholder="Начните вводить текст задачи..."
-                   onkeyup="filterTasks()">
+                   onkeyup="updateTasks()">
         </div>
     </div>
     <div id="task-list"
