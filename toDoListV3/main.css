@@ -420,3 +420,7 @@ h1 {
 .todo__task__checkbox__completed button,.todo__task__checkbox__cancelled button {
     display:none;
 }
+
+.hidden {
+    display:none;
+}

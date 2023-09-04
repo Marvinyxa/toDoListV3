@@ -126,8 +126,8 @@ function tasksOutput(arr) {
             <div class="${checkPriority(task)}" 
             id="${task.id}">${taskPriority(task)}</div>
             <div class="${changeTaskClass(task)}">
-                <div class="todo__task__text__and__date">
-                    <div onclick="changeTextTask(${task.id})" 
+                <div id="task-text-and-date" class="todo__task__text__and__date">
+                    <div ondblclick="changeTextTask(${task.id})"
                     id="task-text-${task.id}"
                     class="todo__task__text">${task.text}</div>
                     <div class="todo__task__date">${task.stringDate}</div>
@@ -214,11 +214,24 @@ function checkPriority(task) {
 }
 
 function changeTextTask(taskId) {
-    const div = document.getElementById(`task-text-${taskId}`);
-
-
-
-
+    let task = arrayTasks.find(task => taskId === task.id);
+    console.log(task);
+    let parentElement = document.getElementById('task-text-and-date');
+    let div = document.getElementById(`task-text-${taskId}`);
+    let oldValue = div.innerHTML;
+    let input = document.createElement('input');
+    input.value = oldValue;
+    div.classList.add('hidden');
+    parentElement.appendChild(input);
+    input.focus();
+    input.onblur = function() {
+        let newValue = input.value;
+        div.innerHTML = newValue;
+        div.classList.remove("hidden");
+        parentElement.removeChild(input);
+        task.text = newValue;
+        putTask(task);
+    };
 }
 
 /**
