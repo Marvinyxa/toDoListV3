@@ -213,6 +213,10 @@ function checkPriority(task) {
     return classColorPriority;
 }
 
+/**
+ * функция позволяет при двойном клике на текст задачи изменять его
+ * @param taskId - идентификатор задачи
+ */
 function changeTextTask(taskId) {
     let task = arrayTasks.find(task => taskId === task.id);
     console.log(task);
