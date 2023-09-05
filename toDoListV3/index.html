@@ -3,22 +3,29 @@
 <head>
     <meta charset="UTF-8">
     <title>ToDo лист</title>
-    <link rel="stylesheet" href="main.css">
+    <link rel="stylesheet"
+          href="main.css">
 </head>
 <body>
 <div class="todo">
-    <div class="todo__content">
+    <div class="content">
         <h1>Задачи</h1>
-        <div class="todo__new">
-            <div class="todo__new__priority">
+        <div class="content__new">
+            <div class="content__new__priority">
                 <span>Выберите приоритет задачи:</span>
                 <select id="select-priority">
-                    <option value="1">Низкий</option>
-                    <option value="2">Средний</option>
-                    <option value="3">Высокий</option>
+                    <option value="1">
+                        Низкий
+                    </option>
+                    <option value="2">
+                        Средний
+                    </option>
+                    <option value="3">
+                        Высокий
+                    </option>
                 </select>
             </div>
-            <div class="todo__new__input">
+            <div class="content__new__input">
                 <input id="add"
                        type="txt"
                        placeholder="Введите новую задачу">
@@ -30,19 +37,21 @@
                 </button>
             </div>
         </div>
-        <div class="todo__filters">
-            <div class="todo__filters__priority">
-                <span class="todo__filters__priority__span">Фильтр по приоритету:</span>
+        <div class="filters">
+            <div class="filters__priority">
+                <span class="filters__priority__span">Фильтр по приоритету:</span>
                 <select id="select-filter-priority"
-                        class="todo__select__priority"
-                        onchange="updateTasks()">
-                    <option value="4">Любой</option>
-                    <option value="1">Низкий</option>
-                    <option value="2">Средний</option>
-                    <option value="3">Высокий</option>
+                        onchange="updateTasks()"
+                        class="todo__select__priority">
+                    <option value="4">
+                        Любой
+                    </option>
+                    <option value=1>Низкий</option>
+                    <option value=2>Средний</option>
+                    <option value=3>Высокий</option>
                 </select>
             </div>
-            <div class="todo__filters__status">
+            <div class="filters__status">
                 <span>Фильтр по статусу:</span>
                 <span>активные</span>
                 <input id="checkbox-filter-active"
@@ -58,14 +67,14 @@
                        onclick="updateTasks()">
             </div>
         </div>
-        <div class="todo__sort">
-            <div class="todo__sort__date__priority">
-                <div class="todo__sort__date">
-                    <div class="todo__sort__date__span">
-                        <span> Сортировка по дате:</span>
+        <div class="sort">
+            <div class="sort__date__priority">
+                <div class="sort__date">
+                    <div class="sort__date__span">
+                        <span>Сортировка по дате:</span>
                     </div>
                     <div id="sort-by-date"
-                         class="todo__sort__button"
+                         class="sort__button"
                          onclick="changeDate()">
                         <span>Дата создания</span>
                         <div id="arrow-date"
@@ -76,13 +85,13 @@
                         </div>
                     </div>
                 </div>
-                <div class="todo__sort__priority">
-                    <div class="todo__sort__priority__span">
+                <div class="sort__priority">
+                    <div class="sort__priority__span">
                         <span>Сортировка по приоритету:</span>
                     </div>
                     <div id="sort-by-priority"
-                         class="todo__sort__button"
-                         onclick="changePriority()">
+                         onclick="changePriority()"
+                         class="sort__button">
                         <span>Приоритет</span>
                         <div id="arrow-priority"
                              class="arrow">
@@ -94,7 +103,7 @@
                 </div>
             </div>
         </div>
-        <div class="todo__find">
+        <div class="find">
             <span>Поиск задачи по тексту:</span>
             <input id="input-find"
                    type="txt"
@@ -103,9 +112,10 @@
         </div>
     </div>
     <div id="task-list"
-         class="todo__tasks">
+         class="tasks">
     </div>
 </div>
-<script src="main.js"></script>
+<script src="main.js"
+></script>
 </body>
 </html>

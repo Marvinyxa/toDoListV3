@@ -16,7 +16,7 @@ html, body {
 }
 
 * {
-    margin:0;
+    margin: 0;
     box-sizing: border-box;
 }
 
@@ -28,8 +28,8 @@ body {
     font-size: 16px;
 }
 
-select, .todo__sort__date__button, .todo__sort__priority__button {
-    display:flex;
+select, .sort__date__button, .sort__priority__button {
+    display: flex;
     min-width: 50px;
     width: 150px;
     border: 2px solid #9aafe7;
@@ -43,7 +43,7 @@ select, .todo__sort__date__button, .todo__sort__priority__button {
 }
 
 .todo {
-    display:flex;
+    display: flex;
     flex-direction: column;
     background-color: aliceblue;
     width: 90%;
@@ -53,62 +53,62 @@ select, .todo__sort__date__button, .todo__sort__priority__button {
     padding: 20px;
     min-width: 1000px;
     min-height: 400px;
-    gap:50px;
+    gap: 50px;
 }
 
 h1 {
     text-align: center
 }
 
-.todo__content {
-    display:flex;
-    flex-direction:column;
-    gap:15px;
+.content {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
 }
 
-.todo__new {
+.content__new {
     display: flex;
     align-items: center;
     justify-content: space-between;
     gap: 10px;
 }
 
-.todo__new__priority {
-    display:flex;
+.content__new__priority {
+    display: flex;
     align-items: center;
     justify-content: space-between;
-    min-width:300px;
+    min-width: 300px;
     width: 30%;
     height: 40px;
     min-height: 20px;
     gap: 10px;
 }
 
-.todo__new__input {
-    display:flex;
+.content__new__input {
+    display: flex;
     justify-content: space-between;
-    position:relative;
+    position: relative;
     align-items: center;
     width: 68%;
     gap: 10px;
     min-width: 350px;
 }
 
-.todo__new input,.todo__find input {
+.content__new input, .find input {
     padding: 8px;
     border: 2px solid #9aafe7;
-    border-radius:12px;
+    border-radius: 12px;
     background-color: white;
     font-family: 'Ubuntu', sans-serif;
     font-size: 16px;
     min-width: 300px;
     width: 95%;
     min-height: 20px;
-    height:40px;
+    height: 40px;
 }
 
-.todo__new button {
-    display:flex;
+.content__new button {
+    display: flex;
     align-items: center;
     justify-content: center;
     border: 2px solid #9aafe7;
@@ -120,107 +120,108 @@ h1 {
     cursor: pointer;
 }
 
-.todo__new span {
-    display:flex;
-    align-items:center;
+.content__new span {
+    display: flex;
+    align-items: center;
     justify-content: flex-start;
     width: 235px;
-    min-height:20px;
+    min-height: 20px;
     height: 40px;
 
 
 }
 
-.todo__filters {
+.filters {
     display: flex;
     align-items: center;
     justify-content: space-between;
 }
 
-.todo__filters span {
+.filters span {
     display: flex;
     align-items: center;
     justify-content: flex-start;
 }
 
-.todo__select__priority {
+.select__priority {
     display: flex;
-    text-align:center;
+    text-align: center;
 }
 
-.todo__filters__status {
-    display:flex;
+.filters__status {
+    display: flex;
     gap: 10px;
-    min-height:20px;
+    min-height: 20px;
     height: 30px;
 }
 
-.todo__filters__priority {
-    display:flex;
+.filters__priority {
+    display: flex;
     align-items: center;
     justify-content: space-between;
     gap: 10px;
     min-width: 300px;
     width: 30%;
-    min-height:20px;
-    height:40px;
+    min-height: 20px;
+    height: 40px;
 }
 
-.todo__filters__priority__span {
+.filters__priority__span {
     width: 200px;
     height: 40px;
 }
 
-.todo__sort {
-    display:flex;
+.sort {
+    display: flex;
     justify-content: flex-end;
     gap: 20px;
 }
-.todo__sort input {
+
+.sort input {
 }
 
-.todo__sort__date__span {
+.sort__date__span {
     display: flex;
     justify-content: flex-start;
     align-items: center;
-    width:45%;
-    min-width:100px;
-    min-height:20px;
+    width: 45%;
+    min-width: 100px;
+    min-height: 20px;
 }
 
-.todo__sort__date {
-    display:flex;
+.sort__date {
+    display: flex;
     justify-content: flex-end;
-    gap:10px;
-    width:20%;
+    gap: 10px;
+    width: 20%;
     min-width: 350px;
-    height:40px;
-    align-items:center;
+    height: 40px;
+    align-items: center;
 }
 
-.todo__sort__date__priority {
-    display:flex;
+.sort__date__priority {
+    display: flex;
     justify-content: flex-end;
-    gap:10px;
+    gap: 10px;
 }
 
-.todo__sort__date__priority select {
+.sort__date__priority select {
     width: 150px;
     min-width: 40px;
 }
 
-.todo__sort__priority {
-    display:flex;
+.sort__priority {
+    display: flex;
     text-align: center;
     justify-content: flex-end;
-    align-items:center;
+    align-items: center;
     gap: 10px;
-    min-width:350px;
-    width:54%;
+    min-width: 350px;
+    width: 54%;
 
 }
 
-.todo__find {
+.find {
     display: flex;
     text-align: center;
     justify-content: space-between;
@@ -228,88 +229,92 @@ h1 {
     gap: 10px;
 }
 
-.todo__find span {
-    display:flex;
-    width:13%;
+.find span {
+    display: flex;
+    width: 13%;
     justify-content: flex-start;
 
 }
 
-.todo__find input {
+.find input {
     min-height: 20px;
-    height:40px;
+    height: 40px;
     width: 86%;
     min-width: 400px;
 }
 
-.todo__sort__button {
-    display:flex;
-    text-align:center;
+.sort__button {
+    display: flex;
+    text-align: center;
     align-items: center;
     justify-content: center;
     width: 150px;
     height: 40px;
     position: relative;
     border: 2px solid #9aafe7;
-    border-radius:12px;
+    border-radius: 12px;
     background-color: white;
     cursor: pointer;
 }
 
-.todo__sort__date__button {
+.sort__date__button {
     display: flex;
 }
 
-.todo__sort__priority__span {
-    display:flex;
+.sort__priority__span {
+    display: flex;
     min-width: 100px;
     min-height: 20px;
-    width:210px;
+    width: 210px;
 }
 
-.todo__sort__priority__button {
-    position:relative;
+.sort__priority__button {
+    position: relative;
 }
 
 .arrow {
-    display:none;
+    display: none;
     position: absolute;
     right: 3px;
 }
 
 .arrow__up {
-    display:block;
+    display: block;
 }
 
 .arrow__down {
-    display:block;
+    display: block;
     transform: rotate(180deg);
 }
-.todo__task:hover .todo__task__checkbox__cancelled, .todo__task:hover .todo__task__checkbox__completed {
-    display:block;
+
+.task:hover .task__buttons {
+    display: flex;
 }
 
-.todo__tasks {
+.tasks {
     display: flex;
     flex-direction: column;
     justify-content: flex-start;
     align-items: center;
     width: 100%;
-    max-height:90%;
-    gap:10px;
+    max-height: 90%;
+    gap: 10px;
     overflow-y: auto;
     overflow-style: marquee-block;
 }
 
-.todo__task__button {
-    display:flex;
+.task__buttons {
+    display: none;
     align-items: center;
     justify-content: center;
-    gap:10px;
-
+    gap: 5px;
 }
 
-.todo__task__date {
+.task__buttons:has(.display-none) {
+    gap: 0;
+}
+
+.task__info__date {
     display: flex;
     font-size: 10px;
     align-items: flex-end;
@@ -319,54 +324,54 @@ h1 {
     width: 99%;
 }
 
-.todo__task__text__and__date {
-    display:flex;
+.task__info {
+    display: flex;
     flex-direction: column;
 }
 
-.todo__task {
-    padding:5px;
-    gap:10px;
-    display:flex;
+.task-container {
+    padding: 5px;
+    gap: 10px;
+    display: flex;
     justify-content: space-between;
     align-items: center;
     min-height: 80px;
     max-height: 200px;
-    width:100%;
-    cursor:default;
+    width: 100%;
+    cursor: default;
 }
 
-.todo__task__priority__red, .todo__task__priority__yellow, .todo__task__priority__green {
-    display:flex;
+.task-priority-low, .task-priority-medium, .task-priority-high {
+    display: flex;
     gap: 25px;
     justify-content: center;
     min-width: 70px;
 }
 
-.todo__task__priority__red {
-    color:red;
+.task-priority-low {
+    color: red;
 }
 
-.todo__task__priority__yellow {
+.task-priority-medium {
     color: #fdda05;
 }
 
-.todo__task__priority__green {
+.task-priority-high {
     color: #0ab70a;
 }
 
-.todo__task__text__body__completed {
-    background: #90f190;
+.task-completed {
+    background: #90f190 !important;
     text-decoration: line-through;
     color: rgba(131, 131, 131, 0.66);
 }
 
-.todo__task__text__body__cancelled {
-    background-color: indianred;
+.task-cancelled {
+    background-color: indianred !important;
 }
 
-.todo__task__text__body,.todo__task__text__body__cancelled,.todo__task__text__body__completed {
-    display:flex;
+.task, .task-cancelled, .task-completed {
+    display: flex;
     align-items: flex-start;
     position: relative;
     justify-content: space-between;
@@ -378,49 +383,21 @@ h1 {
     padding: 8px;
 }
 
-.todo__task__text__body {
+.task {
     background: white;
 }
 
-.todo__task__text {
-    display:flex;
-}
-
-.todo__task__checkbox {
-    cursor:pointer;
+.task__info__text {
     display: flex;
 }
 
-.todo__task__checkbox__completed input, .todo__task__checkbox__cancelled input {
-    display:none;
+
+.task-delete img {
+    margin-right: 5px;
+    cursor: pointer;
 }
 
-.todo__task__checkbox__cancelled, .todo__task__checkbox__completed {
+.display-none {
     display: none;
 }
 
-.todo__task__checkbox__completed img,.todo__task__checkbox__cancelled img {
-    cursor:pointer;
-}
-
-.todo__delete button {
-    display:none;
-}
-
-.todo__delete img {
-    margin-right: 5px;
-    cursor:pointer;
-}
-
-.todo__task__checkbox__cancelled__block, .todo__task__checkbox__completed__block {
-    display:none;
-    visibility:hidden;
-}
-
-.todo__task__checkbox__completed button,.todo__task__checkbox__cancelled button {
-    display:none;
-}
-
-.hidden {
-    display:none;
-}

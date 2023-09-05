@@ -2,6 +2,16 @@ const inputTask = document.getElementById('add');
 const selectPriority = document.getElementById('select-priority');
 const taskList = document.getElementById('task-list');
 const url = 'http://127.0.0.1:3000/items';
+const statusDictionary ={
+    completed: 1,
+    active: 2,
+    cancelled: 3
+}
+const priorityDictionary = {
+    low: 1,
+    medium: 2,
+    high: 3
+}
 let arrayTasks = [];
 let dateStatus = 1; // статус 1 - нет сортировки, статус 2 - по возрастанию, статус 3 - по убыванию
 let priorityStatus = 1;
@@ -18,7 +28,7 @@ async function getTasks() {
             'Content-Type': 'application/json;charset=utf-8'
         },
         method: 'GET',
-    }
+    };
     const response = await fetch(url, options);
     const tasks = await response.json();
     arrayTasks = tasks;
@@ -37,7 +47,7 @@ async function deleteTask(id) {
             'Content-Type': 'application/json;charset=utf-8'
         },
         method: 'DELETE',
-    }
+    };
     const response = await fetch(requestUrl, options);
     const result = await response.json();
     getTasks();
@@ -55,9 +65,8 @@ async function saveTask(task) {
         },
         method: "POST",
         body: JSON.stringify(task),
-    }
-    const response = await fetch(url, options);
-    const result = await response.json();
+    };
+    await fetch(url, options);
     getTasks();
 }
 
@@ -74,7 +83,7 @@ async function putTask(task) {
         },
         method: "PUT",
         body: JSON.stringify(task)
-    }
+    };
     const response = await fetch(requestUrl, options);
     const result = await response.json();
     getTasks(); // ?todo сделать поиск элемента который изменяется
@@ -84,7 +93,6 @@ async function putTask(task) {
  * функция добавляет новую задачу
  */
 function addTask() {
-    console.log('add')
     let task = {};
     if (inputTask.value && checkSameTask()) {
         task.text = inputTask.value;
@@ -122,46 +130,41 @@ function checkSameTask() {
 function tasksOutput(arr) {
     taskList.innerHTML = '';
     arr.forEach(task => {
-        taskList.innerHTML += `<div class="todo__task">
+        taskList.innerHTML += `<div class="task-container">
             <div class="${checkPriority(task)}" 
-            id="${task.id}">${taskPriority(task)}</div>
-            <div class="${changeTaskClass(task)}">
-                <div id="task-text-and-date" class="todo__task__text__and__date">
+                 id="${task.id}">
+                    ${taskPriority(task)}
+            </div>
+            <div class="task ${changeTaskClass(task)}">
+                <div id="task-info" class="task__info"> 
                     <div ondblclick="changeTextTask(${task.id})"
-                    id="task-text-${task.id}"
-                    class="todo__task__text">${task.text}</div>
-                    <div class="todo__task__date">${task.stringDate}</div>
+                         id="task-info-${task.id}"
+                         class="task__info__text">${task.text}</div>
+                    <div class="task__info__date">
+                        ${task.stringDate}
+                    </div>
                 </div>
-                <div class="todo__task__button">
-                    <div class="todo__task__checkbox__completed"
-                     id="btn-complete-${task.id}">
-                        <label>
-                            <button onclick="completeTask(${task.id})"></button>
-                            <img src="checkmark.png" 
-                            width="30" 
-                            height="30">
-                        </label>
-                    </div>
-                    <div class="todo__task__checkbox__cancelled" 
-                    id="btn-cancel-${task.id}">
-                        <label>
-                            <button onclick="cancelTask(${task.id})"></button>
-                            <img src="cross.png" 
-                            width="36" 
-                            height="36">
-                        </label>
-                    </div>
+                <div class="task__buttons">
+                    <img src="checkmark.png"
+                         onclick="completeTask(${task.id})" 
+                         width="30" 
+                         height="30"
+                         class="${task.status === statusDictionary.cancelled ? 'display-none': ''}">
+                    <img src="cross.png"
+                         onclick="cancelTask(${task.id})" 
+                         width="36" 
+                         height="36"
+                         class="${task.status === statusDictionary.completed ? 'display-none' : ''}">
                 </div>
             </div>
-            <div class="todo__delete">
-                <label>
-                    <button onclick="deleteTask(${task.id})"></button>
-                    <div><img src="delete.png" width="30" height="30" ></div>
-                </label>
+            <div class="task-delete">
+                <img src="delete.png" 
+                     width="30" 
+                     height="30"
+                     onclick="deleteTask(${task.id})">
             </div>
         </div>`;
     });
-    blockButtons();
 }
 
 /**
@@ -170,10 +173,10 @@ function tasksOutput(arr) {
  * @returns {string} приоритет
  */
 function taskPriority (task) {
-    if (task.priority === '1') {
+    if (Number(task.priority) === priorityDictionary.low) {
         return 'Низкий';
     }
-    else if (task.priority === '2') {
+    else if (Number(task.priority) === priorityDictionary.medium) {
         return 'Средний';
     }
     else return 'Высокий';
@@ -185,15 +188,13 @@ function taskPriority (task) {
  * @returns {string} нужный класс блока div в зависимости от статуса задачи
  */
 function changeTaskClass(task) {
-    let taskClass = '';
-    if (task.status === 1) {
-        taskClass = 'todo__task__text__body__completed';
-    } else if (task.status === 3) {
-        taskClass = 'todo__task__text__body__cancelled';
+    if (task.status === statusDictionary.completed) {
+        return 'task-completed';
+    } else if (task.status === statusDictionary.cancelled) {
+        return 'task-cancelled';
     } else {
-        taskClass = 'todo__task__text__body';
+        return '';
     }
-    return taskClass;
 }
 
 /**
@@ -203,12 +204,12 @@ function changeTaskClass(task) {
  */
 function checkPriority(task) {
     let classColorPriority = '';
-    if (task.priority === '1') {
-        classColorPriority = 'todo__task__priority__red';
-    } else if (task.priority === '2') {
-        classColorPriority = 'todo__task__priority__yellow';
+    if (Number(task.priority) === priorityDictionary.low) {
+        classColorPriority = 'task-priority-low';
+    } else if (Number(task.priority) === priorityDictionary.medium) {
+        classColorPriority = 'task-priority-medium';
     } else {
-        classColorPriority = 'todo__task__priority__green';
+        classColorPriority = 'task-priority-high';
     }
     return classColorPriority;
 }
@@ -220,18 +221,18 @@ function checkPriority(task) {
 function changeTextTask(taskId) {
     let task = arrayTasks.find(task => taskId === task.id);
     console.log(task);
-    let parentElement = document.getElementById('task-text-and-date');
-    let div = document.getElementById(`task-text-${taskId}`);
-    let oldValue = div.innerHTML;
+    const parentElement = document.getElementById('task-info');
+    const taskText = document.getElementById(`task-info-${taskId}`);
+    let oldValue = taskText.innerHTML;
     let input = document.createElement('input');
     input.value = oldValue;
-    div.classList.add('hidden');
+    taskText.classList.add('hidden');
     parentElement.appendChild(input);
     input.focus();
     input.onblur = function() {
         let newValue = input.value;
-        div.innerHTML = newValue;
-        div.classList.remove("hidden");
+        taskText.innerHTML = newValue;
+        taskText.classList.remove("hidden");
         parentElement.removeChild(input);
         task.text = newValue;
         putTask(task);
@@ -244,7 +245,7 @@ function changeTextTask(taskId) {
  */
 function completeTask(taskId) {
     const foundTask = arrayTasks.find(task => task.id === taskId);
-    foundTask.status = (foundTask.status === 2) ? 1 : 2;
+    foundTask.status = (foundTask.status === statusDictionary.active) ? 1 : 2;
     putTask(foundTask);
 }
 
@@ -254,27 +255,8 @@ function completeTask(taskId) {
  */
 function cancelTask(taskId) {
     const foundTask = arrayTasks.find(task => task.id === taskId);
-    foundTask.status = (foundTask.status === 2) ? 3 : 2;
+    foundTask.status = (foundTask.status === statusDictionary.active) ? 3 : 2;
     putTask(foundTask);
-}
-
-/**
- * функция блокирует одну из кнопок статуса, в зависимости от текущего статуса задачи
- */
-function blockButtons() {
-    arrayTasks.forEach(task => {
-        if (task.status === 1) {
-            let btnCompleted = document.getElementById(`btn-cancel-${task.id}`);
-            btnCompleted?.classList.replace('todo__task__checkbox__cancelled', 'todo__task__checkbox__cancelled__block');
-        }
-    });
-    arrayTasks.forEach(task => {
-        if (task.status === 3) {
-            let btnCompleted = document.getElementById(`btn-complete-${task.id}`);
-            btnCompleted?.classList.replace('todo__task__checkbox__completed', 'todo__task__checkbox__completed__block');
-        }
-    });
-
 }
 
 /**
@@ -284,9 +266,7 @@ function blockButtons() {
  * @returns {number} возвращает результат по которому и будет происходить сортировка
  */
 function compareTasksByStatus(a, b) {
-    if (a.status < b.status) return -1; // Сортировка по возрастанию
-    if (a.status > b.status) return 1;
-    return 0;
+    return a.status- b.status;
 }
 
 /**
@@ -300,25 +280,26 @@ function filterTasks() {
     const array = [...arrayTasks];
     let filteredArray= [];
     if (checkboxActive) {
-        filteredArray = [...filteredArray, ...array.filter(task => task.status === 2)];
+        filteredArray = [...filteredArray, ...array.filter(task => task.status === statusDictionary.active)];
     }
     if (checkboxCancelled) {
-        filteredArray = [...filteredArray, ...array.filter(task => task.status === 3)];
+        filteredArray = [...filteredArray, ...array.filter(task => task.status === statusDictionary.cancelled)];
     }
     if (checkboxCompleted) {
-        filteredArray = [...filteredArray, ...array.filter(task => task.status === 1)];
+        filteredArray = [...filteredArray, ...array.filter(task => task.status === statusDictionary.completed)];
     }
     if (!checkboxCancelled && !checkboxActive && !checkboxCompleted) {
         filteredArray = structuredClone(array);
     }
     if (priorityStatus === 1 && dateStatus === 1) {
-        filteredArray.sort(compareTasksByStatus);
+        filteredArray.sort(compareTasksByStatus); // ?todo fhfgh
     }
     const filteredByPriority = filterByPriority(filteredArray);
     const sortedByPriority = sortBy(filteredByPriority,priorityStatus,'arrow-priority', 'priority');
     const sortedByDate = sortBy(sortedByPriority,dateStatus,'arrow-date', 'date');
     return findTask(sortedByDate);
 }
+
 
 /**
  * функция перерисовки массива задач
