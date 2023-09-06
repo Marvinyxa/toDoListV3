@@ -17,6 +17,7 @@ const sortStatusDictionary = {
     ascending:2,
     descending:3
 };
+
 let arrayTasks = [];
 let dateStatus = sortStatusDictionary.notSorted;
 let priorityStatus = sortStatusDictionary.notSorted;
@@ -102,7 +103,7 @@ function addTask() {
         alert('Вы ввели пустое значение!');
         return;
     }
-    let task = {};
+    const task = {};
     if (inputTask.value && checkSameTask()) {
         task.text = inputTask.value;
         task.priority = selectPriority.value;
@@ -145,12 +146,14 @@ function tasksOutput(arr) {
                     ${taskPriority(task)}
             </div>
             <div class="task ${changeTaskClass(task)}">
-                <div id="task-info" class="task__info"> 
-                    <div ondblclick="changeTextTask(${task.id})"
-                         id="task-info-${task.id}"
-                         class="task__info__text">${task.text}</div>
+                <div id="task-info"
+                     class="task__info"> 
+                    <div id="task-info-${task.id}"
+                         ondblclick="changeTextTask(${task.id})"
+                         class="task__info__text">${task.text}
+                    </div>
                     <div class="task__info__date">
-                        ${task.stringDate}
+                             ${task.stringDate}
                     </div>
                 </div>
                 <div class="task__buttons">
@@ -290,7 +293,7 @@ function filterTasks() {
     if (!checkboxCancelled && !checkboxActive && !checkboxCompleted) {
         filteredArray = structuredClone(array);
     }
-    if (priorityStatus === priorityStatusDictionary.notSorted && dateStatus === dateStatusDictionary.notSorted) {
+    if (priorityStatus === sortStatusDictionary.notSorted && dateStatus === sortStatusDictionary.notSorted) {
         filteredArray.sort((a,b) => a.status- b.status);
     }
     const filteredByPriority = filterByPriority(filteredArray);
@@ -362,7 +365,7 @@ function sortBy(arr, status, id, key) {
  * функция смены статуса сортировки приоритета и блокировки статуса сортировки даты
  */
 function changePriority() {
-    priorityStatus = (priorityStatus < sortStatusDictionary.descending) ? sortStatusDictionary.ascending : sortStatusDictionary.notSorted;
+    priorityStatus = changeSortStatus(priorityStatus);
     dateStatus = sortStatusDictionary.notSorted;
     updateTasks();
 }
@@ -371,7 +374,24 @@ function changePriority() {
  * функция смены статуса сортировки даты и блокировки статуса сортировки приоритета
  */
 function changeDate() {
-    dateStatus = (dateStatus < sortStatusDictionary.descending) ? sortStatusDictionary.ascending : sortStatusDictionary.notSorted;
+    dateStatus = changeSortStatus(dateStatus);
     priorityStatus = sortStatusDictionary.notSorted;
     updateTasks();
+}
+
+/**
+ * вспомогательная функция смены статуса сортировки даты или приоритета
+ * @param currentStatus статус сортировки: по дате или приоритету
+ * @returns {number} возвращает новый статус сортировки: по дате или приоритету
+ */
+function changeSortStatus(currentStatus) {
+    if (currentStatus === sortStatusDictionary.ascending) {
+        return sortStatusDictionary.descending;
+    }
+    else if (currentStatus === sortStatusDictionary.descending) {
+        return sortStatusDictionary.notSorted;
+    }
+    else {
+        return sortStatusDictionary.ascending;
+    }
 }
