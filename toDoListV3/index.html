@@ -42,7 +42,7 @@
                 <span class="filters__priority__span">Фильтр по приоритету:</span>
                 <select id="select-filter-priority"
                         onchange="updateTasks()"
-                        class="todo__select__priority">
+                        class="filters_priority__select">
                     <option value="4">
                         Любой
                     </option>
@@ -68,11 +68,9 @@
             </div>
         </div>
         <div class="sort">
-            <div class="sort__date__priority">
+            <div class="sort__date-priority">
                 <div class="sort__date">
-                    <div class="sort__date__span">
-                        <span>Сортировка по дате:</span>
-                    </div>
+                    <span class="sort__date__span">Сортировка по дате:</span>
                     <div id="sort-by-date"
                          class="sort__button"
                          onclick="changeDate()">

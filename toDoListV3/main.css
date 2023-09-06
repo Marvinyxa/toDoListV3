@@ -21,22 +21,20 @@ html, body {
 }
 
 body {
-    display: flex;
-    justify-content: center;
     font-family: 'Ubuntu', sans-serif;
     background-color: #9aafe7;
     font-size: 16px;
 }
 
-select, .sort__date__button, .sort__priority__button {
+select {
     display: flex;
+    font-size: 16px;
+    font-family: 'Ubuntu', sans-serif;
     min-width: 50px;
     width: 150px;
     border: 2px solid #9aafe7;
     border-radius: 12px;
     text-align: center;
-    font-size: 16px;
-    font-family: 'Ubuntu', sans-serif;
     background-color: white;
     height: 40px;
     min-height: 40px;
@@ -56,14 +54,14 @@ select, .sort__date__button, .sort__priority__button {
     gap: 50px;
 }
 
-h1 {
-    text-align: center
-}
-
 .content {
     display: flex;
     flex-direction: column;
     gap: 15px;
+}
+
+h1 {
+    text-align: center
 }
 
 .content__new {
@@ -71,27 +69,6 @@ h1 {
     align-items: center;
     justify-content: space-between;
     gap: 10px;
-}
-
-.content__new__priority {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    min-width: 300px;
-    width: 30%;
-    height: 40px;
-    min-height: 20px;
-    gap: 10px;
-}
-
-.content__new__input {
-    display: flex;
-    justify-content: space-between;
-    position: relative;
-    align-items: center;
-    width: 68%;
-    gap: 10px;
-    min-width: 350px;
 }
 
 .content__new input, .find input {
@@ -131,6 +108,27 @@ h1 {
 
 }
 
+.content__new__priority {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    min-width: 300px;
+    width: 30%;
+    height: 40px;
+    min-height: 20px;
+    gap: 10px;
+}
+
+.content__new__input {
+    display: flex;
+    justify-content: space-between;
+    position: relative;
+    align-items: center;
+    width: 68%;
+    gap: 10px;
+    min-width: 350px;
+}
+
 .filters {
     display: flex;
     align-items: center;
@@ -141,18 +139,6 @@ h1 {
     display: flex;
     align-items: center;
     justify-content: flex-start;
-}
-
-.select__priority {
-    display: flex;
-    text-align: center;
-}
-
-.filters__status {
-    display: flex;
-    gap: 10px;
-    min-height: 20px;
-    height: 30px;
 }
 
 .filters__priority {
@@ -171,22 +157,33 @@ h1 {
     height: 40px;
 }
 
+.filters__priority__select {
+    display: flex;
+    text-align: center;
+}
+
+.filters__status {
+    display: flex;
+    gap: 10px;
+    min-height: 20px;
+    height: 30px;
+}
+
 .sort {
     display: flex;
     justify-content: flex-end;
     gap: 20px;
 }
 
-.sort input {
+.sort__date-priority {
+    display: flex;
+    justify-content: flex-end;
+    gap: 10px;
 }
 
-.sort__date__span {
-    display: flex;
-    justify-content: flex-start;
-    align-items: center;
-    width: 45%;
-    min-width: 100px;
-    min-height: 20px;
+.sort__date-priority select {
+    width: 150px;
+    min-width: 40px;
 }
 
 .sort__date {
@@ -199,15 +196,20 @@ h1 {
     align-items: center;
 }
 
-.sort__date__priority {
+.sort__date__span {
     display: flex;
-    justify-content: flex-end;
-    gap: 10px;
+    justify-content: flex-start;
+    align-items: center;
+    width: 45%;
+    min-width: 100px;
+    min-height: 20px;
 }
 
-.sort__date__priority select {
-    width: 150px;
-    min-width: 40px;
+.sort__priority__span {
+    display: flex;
+    min-width: 100px;
+    min-height: 20px;
+    width: 210px;
 }
 
 .sort__priority {
@@ -221,31 +223,8 @@ h1 {
 
 }
 
-.find {
-    display: flex;
-    text-align: center;
-    justify-content: space-between;
-    align-items: center;
-    gap: 10px;
-}
-
-.find span {
-    display: flex;
-    width: 13%;
-    justify-content: flex-start;
-
-}
-
-.find input {
-    min-height: 20px;
-    height: 40px;
-    width: 86%;
-    min-width: 400px;
-}
-
 .sort__button {
     display: flex;
-    text-align: center;
     align-items: center;
     justify-content: center;
     width: 150px;
@@ -255,21 +234,6 @@ h1 {
     border-radius: 12px;
     background-color: white;
     cursor: pointer;
-}
-
-.sort__date__button {
-    display: flex;
-}
-
-.sort__priority__span {
-    display: flex;
-    min-width: 100px;
-    min-height: 20px;
-    width: 210px;
-}
-
-.sort__priority__button {
-    position: relative;
 }
 
 .arrow {
@@ -285,6 +249,25 @@ h1 {
 .arrow__down {
     display: block;
     transform: rotate(180deg);
+}
+
+.find {
+    display: flex;
+    text-align: center;
+    justify-content: space-between;
+    align-items: center;
+    gap: 10px;
+}
+
+.find span {
+    width: 13%;
+}
+
+.find input {
+    min-height: 20px;
+    height: 40px;
+    width: 86%;
+    min-width: 400px;
 }
 
 .task:hover .task__buttons {
@@ -303,32 +286,6 @@ h1 {
     overflow-style: marquee-block;
 }
 
-.task__buttons {
-    display: none;
-    align-items: center;
-    justify-content: center;
-    gap: 5px;
-}
-
-.task__buttons:has(.display-none) {
-    gap: 0;
-}
-
-.task__info__date {
-    display: flex;
-    font-size: 10px;
-    align-items: flex-end;
-    cursor: default;
-    position: absolute;
-    bottom: 5px;
-    width: 99%;
-}
-
-.task__info {
-    display: flex;
-    flex-direction: column;
-}
-
 .task-container {
     padding: 5px;
     gap: 10px;
@@ -338,10 +295,9 @@ h1 {
     min-height: 80px;
     max-height: 200px;
     width: 100%;
-    cursor: default;
 }
 
-.task-priority-low, .task-priority-medium, .task-priority-high {
+.task-priority {
     display: flex;
     gap: 25px;
     justify-content: center;
@@ -360,6 +316,10 @@ h1 {
     color: #0ab70a;
 }
 
+.task {
+    background: white;
+}
+
 .task-completed {
     background: #90f190 !important;
     text-decoration: line-through;
@@ -370,7 +330,7 @@ h1 {
     background-color: indianred !important;
 }
 
-.task, .task-cancelled, .task-completed {
+.task {
     display: flex;
     align-items: flex-start;
     position: relative;
@@ -383,14 +343,39 @@ h1 {
     padding: 8px;
 }
 
-.task {
-    background: white;
+.task__info {
+    display: flex;
+    flex-direction: column;
+}
+
+.task__info__date {
+    display: flex;
+    font-size: 10px;
+    align-items: flex-end;
+    cursor: default;
+    position: absolute;
+    bottom: 5px;
+    width: 99%;
 }
 
 .task__info__text {
     display: flex;
 }
 
+.task__buttons {
+    display: none;
+    align-items: center;
+    justify-content: center;
+    gap: 5px;
+}
+
+.task__buttons img {
+    cursor:pointer;
+}
+
+.task__buttons:has(.display-none) {
+    gap: 0;
+}
 
 .task-delete img {
     margin-right: 5px;
@@ -400,4 +385,3 @@ h1 {
 .display-none {
     display: none;
 }
-

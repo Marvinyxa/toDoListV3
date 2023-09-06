@@ -6,15 +6,20 @@ const statusDictionary ={
     completed: 1,
     active: 2,
     cancelled: 3
-}
+};
 const priorityDictionary = {
     low: 1,
     medium: 2,
     high: 3
-}
+};
+const sortStatusDictionary = {
+    notSorted: 1,
+    ascending:2,
+    descending:3
+};
 let arrayTasks = [];
-let dateStatus = 1; // статус 1 - нет сортировки, статус 2 - по возрастанию, статус 3 - по убыванию
-let priorityStatus = 1;
+let dateStatus = sortStatusDictionary.notSorted;
+let priorityStatus = sortStatusDictionary.notSorted;
 
 getTasks();
 
@@ -86,13 +91,17 @@ async function putTask(task) {
     };
     const response = await fetch(requestUrl, options);
     const result = await response.json();
-    getTasks(); // ?todo сделать поиск элемента который изменяется
+    getTasks();
 }
 
 /**
  * функция добавляет новую задачу
  */
 function addTask() {
+    if (!inputTask.value) {
+        alert('Вы ввели пустое значение!');
+        return;
+    }
     let task = {};
     if (inputTask.value && checkSameTask()) {
         task.text = inputTask.value;
@@ -131,7 +140,7 @@ function tasksOutput(arr) {
     taskList.innerHTML = '';
     arr.forEach(task => {
         taskList.innerHTML += `<div class="task-container">
-            <div class="${checkPriority(task)}" 
+            <div class="task-priority ${checkPriority(task)}" 
                  id="${task.id}">
                     ${taskPriority(task)}
             </div>
@@ -226,13 +235,13 @@ function changeTextTask(taskId) {
     let oldValue = taskText.innerHTML;
     let input = document.createElement('input');
     input.value = oldValue;
-    taskText.classList.add('hidden');
+    taskText.classList.add('display-none');
     parentElement.appendChild(input);
     input.focus();
     input.onblur = function() {
         let newValue = input.value;
         taskText.innerHTML = newValue;
-        taskText.classList.remove("hidden");
+        taskText.classList.remove("display-none");
         parentElement.removeChild(input);
         task.text = newValue;
         putTask(task);
@@ -260,16 +269,6 @@ function cancelTask(taskId) {
 }
 
 /**
- * вспомогательная функция сортировки по статусу: status = 1 - завершенная, status = 2 - активная, status = 3 - отмененная
- * @param a - первая задача
- * @param b - вторая задача
- * @returns {number} возвращает результат по которому и будет происходить сортировка
- */
-function compareTasksByStatus(a, b) {
-    return a.status- b.status;
-}
-
-/**
  * великая функция фильтрации
  * @returns {*} отфильтрованный массив
  */
@@ -291,15 +290,14 @@ function filterTasks() {
     if (!checkboxCancelled && !checkboxActive && !checkboxCompleted) {
         filteredArray = structuredClone(array);
     }
-    if (priorityStatus === 1 && dateStatus === 1) {
-        filteredArray.sort(compareTasksByStatus); // ?todo fhfgh
+    if (priorityStatus === priorityStatusDictionary.notSorted && dateStatus === dateStatusDictionary.notSorted) {
+        filteredArray.sort((a,b) => a.status- b.status);
     }
     const filteredByPriority = filterByPriority(filteredArray);
     const sortedByPriority = sortBy(filteredByPriority,priorityStatus,'arrow-priority', 'priority');
     const sortedByDate = sortBy(sortedByPriority,dateStatus,'arrow-date', 'date');
     return findTask(sortedByDate);
 }
-
 
 /**
  * функция перерисовки массива задач
@@ -364,8 +362,8 @@ function sortBy(arr, status, id, key) {
  * функция смены статуса сортировки приоритета и блокировки статуса сортировки даты
  */
 function changePriority() {
-    (priorityStatus < 3) ? priorityStatus++ : priorityStatus = 1;
-    dateStatus = 1;
+    priorityStatus = (priorityStatus < sortStatusDictionary.descending) ? sortStatusDictionary.ascending : sortStatusDictionary.notSorted;
+    dateStatus = sortStatusDictionary.notSorted;
     updateTasks();
 }
 
@@ -373,7 +371,7 @@ function changePriority() {
  * функция смены статуса сортировки даты и блокировки статуса сортировки приоритета
  */
 function changeDate() {
-    (dateStatus < 3) ? dateStatus++ : dateStatus = 1;
-    priorityStatus = 1;
+    dateStatus = (dateStatus < sortStatusDictionary.descending) ? sortStatusDictionary.ascending : sortStatusDictionary.notSorted;
+    priorityStatus = sortStatusDictionary.notSorted;
     updateTasks();
 }
