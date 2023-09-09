@@ -13,7 +13,7 @@
         <div class="content__new">
             <div class="content__new__priority">
                 <span>Выберите приоритет задачи:</span>
-                <select id="select-priority">
+                <select id="select-priority" class="with-borders">
                     <option value="1">
                         Низкий
                     </option>
@@ -28,13 +28,13 @@
             <div class="content__new__input">
                 <input id="add"
                        type="txt"
-                       placeholder="Введите новую задачу">
-                <button id="btn-add-task"
-                        onclick="addTask()">
-                    <img src="plus.png"
-                         width="25"
-                         height="25">
-                </button>
+                       placeholder="Введите новую задачу"
+                       class="with-borders">
+                <img src="plus.png"
+                     width="25"
+                     height="25"
+                     onclick="addTask()"
+                     class="with-borders">
             </div>
         </div>
         <div class="filters">
@@ -42,8 +42,8 @@
                 <span class="filters__priority__span">Фильтр по приоритету:</span>
                 <select id="select-filter-priority"
                         onchange="updateTasks()"
-                        class="filters_priority__select">
-                    <option value="4">
+                        class="filters_priority__select with-borders">
+                    <option value=4>
                         Любой
                     </option>
                     <option value=1>
@@ -79,30 +79,26 @@
                     <span class="sort__date__span">Сортировка по дате:</span>
                     <div id="sort-by-date"
                          onclick="changeDate()"
-                         class="sort__button">
+                         class="sort__button with-borders">
                         <span>Дата создания</span>
-                        <div id="arrow-date"
+                        <img src="arrow.png"
+                             width="12"
+                             height="12"
+                             id="arrow-date"
                              class="arrow">
-                            <img src="arrow.png"
-                                 width="12"
-                                 height="12">
-                        </div>
                     </div>
                 </div>
                 <div class="sort__priority">
-                    <div class="sort__priority__span">
-                        <span>Сортировка по приоритету:</span>
-                    </div>
+                    <span class="sort__priority__span">Сортировка по приоритету:</span>
                     <div id="sort-by-priority"
                          onclick="changePriority()"
-                         class="sort__button">
+                         class="sort__button with-borders">
                         <span>Приоритет</span>
-                        <div id="arrow-priority"
+                        <img src="arrow.png"
+                             width="12"
+                             height="12"
+                             id="arrow-priority"
                              class="arrow">
-                            <img src="arrow.png"
-                                 width="12"
-                                 height="12">
-                        </div>
                     </div>
                 </div>
             </div>
@@ -112,11 +108,19 @@
             <input id="input-find"
                    type="txt"
                    placeholder="Начните вводить текст задачи..."
-                   onkeyup="updateTasks()">
+                   onkeyup="updateTasks()"
+                   class="with-borders">
         </div>
     </div>
     <div id="task-list"
          class="tasks">
+    </div>
+    <div id="empty-list"
+         class="empty-list">
+        <span class="empty-list__span">Список дел пуст</span>
+        <img src="emptyList.png"
+             width="230"
+             height="230">
     </div>
 </div>
 <script src="main.js"

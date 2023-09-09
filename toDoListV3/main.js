@@ -1,6 +1,7 @@
 const inputTask = document.getElementById('add');
 const selectPriority = document.getElementById('select-priority');
 const taskList = document.getElementById('task-list');
+const emptyList = document.getElementById('empty-list');
 const url = 'http://127.0.0.1:3000/items';
 const statusDictionary ={
     completed: 1,
@@ -14,8 +15,8 @@ const priorityDictionary = {
 };
 const sortStatusDictionary = {
     notSorted: 1,
-    ascending:2,
-    descending:3
+    ascending: 2,
+    descending: 3
 };
 
 let arrayTasks = [];
@@ -25,7 +26,7 @@ let priorityStatus = sortStatusDictionary.notSorted;
 getTasks();
 
 /**
- * функция подгружает все задачи с бэка
+ * Функция подгружает все задачи с бэка
  * @returns {Promise<void>}
  */
 async function getTasks() {
@@ -36,13 +37,12 @@ async function getTasks() {
         method: 'GET',
     };
     const response = await fetch(url, options);
-    const tasks = await response.json();
-    arrayTasks = tasks;
+    arrayTasks = await response.json();
     updateTasks(arrayTasks);
 }
 
 /**
- * функция удаляет нужную задачу по айди с бэка
+ * Функция удаляет нужную задачу по айди с бэка
  * @param id - айди задачи
  * @returns {Promise<void>}
  */
@@ -55,12 +55,16 @@ async function deleteTask(id) {
         method: 'DELETE',
     };
     const response = await fetch(requestUrl, options);
-    const result = await response.json();
     getTasks();
+    if (arrayTasks.length === 0)
+    {
+        emptyList.classList.remove('display-none');
+    }
+
 }
 
 /**
- * функция передает задачу на бэк
+ * Функция передает задачу на бэк
  * @param task - задача
  * @returns {Promise<void>}
  */
@@ -77,7 +81,7 @@ async function saveTask(task) {
 }
 
 /**
- * функция отслеживает все изменения задачи и передает их на бэк
+ * Функция отслеживает все изменения задачи и передает их на бэк
  * @param task - задача
  * @returns {Promise<void>}
  */
@@ -91,12 +95,11 @@ async function putTask(task) {
         body: JSON.stringify(task)
     };
     const response = await fetch(requestUrl, options);
-    const result = await response.json();
     getTasks();
 }
 
 /**
- * функция добавляет новую задачу
+ * Функция добавляет новую задачу
  */
 function addTask() {
     if (!inputTask.value) {
@@ -109,14 +112,14 @@ function addTask() {
         task.priority = selectPriority.value;
         task.date = new Date().getTime();
         task.stringDate = new Date().toLocaleString();
-        task.status = 2; // status=1 - завершенная, status=2 - неотмеченная, status=3 - отклоненная
+        task.status = statusDictionary.active; // status=1 - завершенная, status=2 - неотмеченная, status=3 - отклоненная
         inputTask.value = '';
         saveTask(task);
     }
 }
 
 /**
- * функция проверяет, есть ли задача с таким же текстом
+ * Функция проверяет, есть ли задача с таким же текстом
  * @returns {boolean} логическое значение есть ли такая же задача или нет
  */
 function checkSameTask() {
@@ -134,11 +137,12 @@ function checkSameTask() {
 }
 
 /**
- * функция вывода задачи
+ * Функция вывода задачи
  * @param arr массив задач
  */
 function tasksOutput(arr) {
     taskList.innerHTML = '';
+    displayEmptyTasksStatus();
     arr.forEach(task => {
         taskList.innerHTML += `<div class="task-container">
             <div class="task-priority ${checkPriority(task)}" 
@@ -169,18 +173,17 @@ function tasksOutput(arr) {
                          class="${task.status === statusDictionary.completed ? 'display-none' : ''}">
                 </div>
             </div>
-            <div class="task-delete">
-                <img src="delete.png" 
+            <img src="delete.png" 
                      width="30" 
                      height="30"
-                     onclick="deleteTask(${task.id})">
-            </div>
+                     onclick="deleteTask(${task.id})"
+                     class="task-delete">
         </div>`;
     });
 }
 
 /**
- * функция выводит приоритет
+ * Функция выводит приоритет
  * @param task задача
  * @returns {string} приоритет
  */
@@ -191,11 +194,13 @@ function taskPriority (task) {
     else if (Number(task.priority) === priorityDictionary.medium) {
         return 'Средний';
     }
-    else return 'Высокий';
+    else {
+        return 'Высокий'
+    }
 }
 
 /**
- * функция меняет стиль задачи в зависимости от статуса задачи
+ * Функция меняет стиль задачи в зависимости от статуса задачи
  * @param task - задача
  * @returns {string} нужный класс блока div в зависимости от статуса задачи
  */
@@ -210,29 +215,26 @@ function changeTaskClass(task) {
 }
 
 /**
- * функция окрашивает  приоритет задачи в нужный цвет
+ * Функция окрашивает  приоритет задачи в нужный цвет
  * @param task - задача
  * @returns {string} нужный класс приоритета, который окрашен в нужный цвет
  */
 function checkPriority(task) {
-    let classColorPriority = '';
     if (Number(task.priority) === priorityDictionary.low) {
-        classColorPriority = 'task-priority-low';
+        return 'task-priority-low';
     } else if (Number(task.priority) === priorityDictionary.medium) {
-        classColorPriority = 'task-priority-medium';
+        return 'task-priority-medium';
     } else {
-        classColorPriority = 'task-priority-high';
+        return 'task-priority-high';
     }
-    return classColorPriority;
 }
 
 /**
- * функция позволяет при двойном клике на текст задачи изменять его
+ * Функция позволяет при двойном клике на текст задачи изменять его
  * @param taskId - идентификатор задачи
  */
 function changeTextTask(taskId) {
     let task = arrayTasks.find(task => taskId === task.id);
-    console.log(task);
     const parentElement = document.getElementById('task-info');
     const taskText = document.getElementById(`task-info-${taskId}`);
     let oldValue = taskText.innerHTML;
@@ -252,27 +254,27 @@ function changeTextTask(taskId) {
 }
 
 /**
- * функция меняет статус задачи с активной на завершенную и наоборот
+ * Функция меняет статус задачи с активной на завершенную и наоборот
  * @param taskId - айди задачи
  */
 function completeTask(taskId) {
     const foundTask = arrayTasks.find(task => task.id === taskId);
-    foundTask.status = (foundTask.status === statusDictionary.active) ? 1 : 2;
+    foundTask.status = (foundTask.status === statusDictionary.active) ? statusDictionary.completed : statusDictionary.active;
     putTask(foundTask);
 }
 
 /**
- * функция меняет статус задачи с активной на отмененную и наоборот
+ * Функция меняет статус задачи с активной на отмененную и наоборот
  * @param taskId - айди задачи
  */
 function cancelTask(taskId) {
     const foundTask = arrayTasks.find(task => task.id === taskId);
-    foundTask.status = (foundTask.status === statusDictionary.active) ? 3 : 2;
+    foundTask.status = (foundTask.status === statusDictionary.active) ? statusDictionary.cancelled : statusDictionary.active;
     putTask(foundTask);
 }
 
 /**
- * великая функция фильтрации
+ * Функция фильтрации
  * @returns {*} отфильтрованный массив
  */
 function filterTasks() {
@@ -293,7 +295,7 @@ function filterTasks() {
     if (!checkboxCancelled && !checkboxActive && !checkboxCompleted) {
         filteredArray = structuredClone(array);
     }
-    if (priorityStatus === sortStatusDictionary.notSorted && dateStatus === sortStatusDictionary.notSorted) {
+    if (priorityStatus === dateStatus) {
         filteredArray.sort((a,b) => a.status- b.status);
     }
     const filteredByPriority = filterByPriority(filteredArray);
@@ -303,14 +305,14 @@ function filterTasks() {
 }
 
 /**
- * функция перерисовки массива задач
+ * Функция перерисовки массива задач
  */
 function updateTasks() {
     tasksOutput(filterTasks());
 }
 
 /**
- * функция фильтрации по приоритету
+ * Функция фильтрации по приоритету
  * @param arr - массив задач
  * @returns {*} отфильтрованный массив
  */
@@ -323,7 +325,7 @@ function filterByPriority(arr) {
 }
 
 /**
- * функция поиска задачи  по тексту
+ * Функция поиска задачи  по тексту
  * @param arr - массив задач
  * @returns {*} отфильтрованный массив
  */
@@ -334,21 +336,21 @@ function findTask(arr) {
 
 
 /**
- * функция сортировки по приоритету или по дате
+ * Функция сортировки по приоритету или по дате
  * @param arr - массив задач
  * @param status - статус сортировки по дате или приоритету
  * @param id - id нужной стрелки
  * @param key - ключ сортировки: по дате или приоритету
- * @returns {*[]}
+ * @returns {*[]} возвращает отфильтрованный массив задач по дате или приоритету
  */
 function sortBy(arr, status, id, key) {
     const arrayClone = [...arr];
     const arrow = document.getElementById(id);
-    if (status === 2) {
+    if (status === sortStatusDictionary.ascending) {
         arrow.classList.add('arrow__up');
         arrayClone.sort((a,b) => a[key] - b[key]);
     }
-    else if (status === 3) {
+    else if (status === sortStatusDictionary.descending) {
         arrow.classList.remove('arrow__up');
         arrow.classList.add('arrow__down');
         arrayClone.sort((a,b) => b[key] - a[key]);
@@ -356,13 +358,12 @@ function sortBy(arr, status, id, key) {
     else {
         arrow.classList.remove('arrow__down');
         arrow.classList.remove('arrow__up');
-
     }
     return arrayClone;
 }
 
 /**
- * функция смены статуса сортировки приоритета и блокировки статуса сортировки даты
+ * Функция смены статуса сортировки приоритета и блокировки статуса сортировки даты
  */
 function changePriority() {
     priorityStatus = changeSortStatus(priorityStatus);
@@ -371,7 +372,7 @@ function changePriority() {
 }
 
 /**
- * функция смены статуса сортировки даты и блокировки статуса сортировки приоритета
+ * Функция смены статуса сортировки даты и блокировки статуса сортировки приоритета
  */
 function changeDate() {
     dateStatus = changeSortStatus(dateStatus);
@@ -380,7 +381,7 @@ function changeDate() {
 }
 
 /**
- * вспомогательная функция смены статуса сортировки даты или приоритета
+ * Вспомогательная функция смены статуса сортировки даты или приоритета
  * @param currentStatus статус сортировки: по дате или приоритету
  * @returns {number} возвращает новый статус сортировки: по дате или приоритету
  */
@@ -393,5 +394,14 @@ function changeSortStatus(currentStatus) {
     }
     else {
         return sortStatusDictionary.ascending;
+    }
+}
+
+function displayEmptyTasksStatus() {
+    if (arrayTasks.length > 0 ) {
+        emptyList.classList.add('display-none');
+    }
+    else {
+        emptyList.classList.remove('display-none');
     }
 }
