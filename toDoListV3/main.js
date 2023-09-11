@@ -11,7 +11,8 @@ const statusDictionary ={
 const priorityDictionary = {
     low: 1,
     medium: 2,
-    high: 3
+    high: 3,
+    any: 4
 };
 const sortStatusDictionary = {
     notSorted: 1,
@@ -54,13 +55,11 @@ async function deleteTask(id) {
         },
         method: 'DELETE',
     };
-    const response = await fetch(requestUrl, options);
+    await fetch(requestUrl, options);
     getTasks();
-    if (arrayTasks.length === 0)
-    {
+    if (arrayTasks.length === 0) {
         emptyList.classList.remove('display-none');
     }
-
 }
 
 /**
@@ -94,7 +93,7 @@ async function putTask(task) {
         method: "PUT",
         body: JSON.stringify(task)
     };
-    const response = await fetch(requestUrl, options);
+    await fetch(requestUrl, options);
     getTasks();
 }
 
@@ -295,7 +294,8 @@ function filterTasks() {
     if (!checkboxCancelled && !checkboxActive && !checkboxCompleted) {
         filteredArray = structuredClone(array);
     }
-    if (priorityStatus === dateStatus) {
+    if (priorityStatus === dateStatus) { // проверка есть ли сортировка по дате или приоритету
+        // если сортировки по дате или приоритету нет, то фильтрация идет следующим образом: сначала завершенные, потом активные, потом отмененные задачи
         filteredArray.sort((a,b) => a.status- b.status);
     }
     const filteredByPriority = filterByPriority(filteredArray);
